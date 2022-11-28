@@ -13,8 +13,8 @@ bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
 
 @dp.message_handler()
-async def echo('Ты пидор'):
-    await 'Ты пидор'
+async def echo(message: types.Message):
+    await message.answer('Ты пидор')
 
 
 if __name__ == '__main__':
