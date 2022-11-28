@@ -1,6 +1,5 @@
 import logging
 import os
-from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils.executor import start_webhook
 from aiogram import Bot, types
@@ -28,6 +27,11 @@ async def on_startup(dispatcher):
 
 async def on_shutdown(dispatcher):
     await bot.delete_webhook()
+
+
+@dp.message_handler(commands=['start'])
+async def process_start_command(message: types.Message):
+    await message.reply("Привет!\nНапиши мне что-нибудь!")
 
 
 @dp.message_handler()
