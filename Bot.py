@@ -14,12 +14,9 @@ k_time = 0
 def TimeList(speciality_num, course_num, group_num):
     __URL = 'https://gu-ural.ru/wp-admin/admin-ajax.php'
 
-    if course_num != 0:
-        k_time = course_num
-
     col = {'form': '1',
            'speciality': speciality_num,
-           'course': k_time,
+           'course': course_num,
            'group': group_num,
            'teacher': '',
            'action': 'lau_shedule_students_show'
@@ -54,7 +51,7 @@ button_qurs = ReplyKeyboardMarkup(resize_keyboard=True).add(qurs)
 start = KeyboardButton('/start')
 button_start = ReplyKeyboardMarkup(resize_keyboard=True).add(start)
 
-restart = KeyboardButton('/restart')
+restart = KeyboardButton('Обновить')
 button_restart = ReplyKeyboardMarkup(resize_keyboard=True).add(restart)
 
 help_comands = ReplyKeyboardMarkup(resize_keyboard=True).row(
@@ -91,21 +88,38 @@ async def process_start_command(message: types.Message):
 async def echo(message: types.Message):
     if message.text == '1️⃣':
         await message.answer(TimeList(4, 1, 792), reply_markup=button_restart)
+        f = open('index.txt', 'w')
+        f.write('1')
     if message.text == '2️⃣':
         await message.answer(TimeList(4, 2, 793), reply_markup=button_restart)
+        f = open('index.txt', 'w')
+        f.write('2')
     if message.text == '3️⃣':
         await message.answer(TimeList(4, 3, 795), reply_markup=button_restart)
+        f = open('index.txt', 'w')
+        f.write('3')
     if message.text == '4️⃣':
         await message.answer(TimeList(4, 4, 794), reply_markup=button_restart)
+        f = open('index.txt', 'w')
+        f.write('4')
     if message.text == '5️⃣':
         await message.answer(TimeList(4, 5, 0), reply_markup=button_restart)
+        f = open('index.txt', 'w')
+        f.write('5')
 
-k =
+    if message.text == 'Обновить':
+        f = open('index.txt', 'r')
 
-
-@dp.message_handler(commands=['restart'])
-async def echo(message: types.Message):
-    await message.answer(TimeList(4, 0, 793), reply_markup=button_restart)
+        if f.read() == '1':
+            await message.answer(TimeList(4, 1, 792), reply_markup=button_restart)
+        if f.read() == '2':
+            await message.answer(TimeList(4, 2, 793), reply_markup=button_restart)
+        if f.read() == '3':
+            await message.answer(TimeList(4, 3, 795), reply_markup=button_restart)
+        if f.read() == '4':
+            await message.answer(TimeList(4, 4, 794), reply_markup=button_restart)
+        if f.read() == '5':
+            await message.answer(TimeList(4, 5, 0), reply_markup=button_restart)
 
 
 if __name__ == '__main__':
