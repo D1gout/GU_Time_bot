@@ -27,7 +27,7 @@ async def process_start_command(message: types.Message):
 
 @dp.message_handler()
 async def echo(message: types.Message):
-    await message.answer(message.text)
+    await message.answer("Пидоры")
 
 
 if __name__ == '__main__':
