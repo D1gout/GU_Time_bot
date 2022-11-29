@@ -1,21 +1,50 @@
-import logging
+import json
+from datetime import datetime
 
-from aiogram import Bot, Dispatcher, executor, types
-
-# Токен, выданный BotFather в телеграмме
-API_TOKEN = 'BOT TOKEN HERE'
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-
-# Initialize bot and dispatcher
-bot = Bot(token=API_TOKEN)
-dp = Dispatcher(bot)
-
-@dp.message_handler()
-async def echo(message: types.Message):
-    await message.answer(message.text)
+import requests
 
 
-if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates=True)
+def TimeList(speciality_num, course_num, group_num):
+    __URL = 'https://gu-ural.ru/wp-admin/admin-ajax.php'
+
+    if course_num != 0:
+        k_time = course_num
+
+    col = {'form': '1',
+           'speciality': speciality_num,
+           'course': k_time,
+           'group': group_num,
+           'teacher': '',
+           'action': 'lau_shedule_students_show'
+           }
+    req = requests.post(__URL, data=col).text
+    list = json.loads(req)
+    list_speed = list["current"]["data"]
+    text = ''
+    day = datetime.today().isoweekday()
+    for i in range(len(list_speed)):
+        #text += \
+        if list_speed[i]["weekday"] == str(day):
+            if list_speed[i]["notes"] != "":
+                if list_speed[i]["place"] is not None:
+                    print(list_speed[i]["discipline"] + " ("
+                          + list_speed[i]["notes"] + ")\n "
+                          + list_speed[i]["place"] + "\n")
+                else:
+                    print(list_speed[i]["discipline"] + " ("
+                          + list_speed[i]["notes"] + ")\n" + "\n")
+            else:
+                if list_speed[i]["place"] is not None:
+                    print(list_speed[i]["discipline"] +
+                          + list_speed[i]["place"] + "\n")
+                else:
+                    print(list_speed[i]["discipline"] + " ("
+                          + list_speed[i]["notes"] + ")\n" + "\n")
+
+        # if list_speed[i]["weekday"] == str(day+1):
+        #     print(list_speed[i]["discipline"] + " (" + list_speed[i]["notes"] + ")\n" + list_speed[i]["time"] + "\n")
+
+    return text
+
+
+print(TimeList(4, 2, 793))
