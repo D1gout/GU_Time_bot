@@ -28,7 +28,20 @@ def TimeList(speciality_num, course_num, group_num):
     day = datetime.today().isoweekday()
     for i in range(len(list_speed)):
         if list_speed[i]["weekday"] == str(day):
-            text += list_speed[i]["discipline"] + " (" + list_speed[i]["notes"] + ")\n" + list_speed[i]["time"] + "\n"
+            if list_speed[i]["notes"] != "":
+                if list_speed[i]["place"] is not None:
+                    text += list_speed[i]["discipline"] + " (" + list_speed[i]["notes"] + ")\n" \
+                            + list_speed[i]["place"] \
+                            + "\n" + list_speed[i]["time"] + "\n\n"
+                else:
+                    text += list_speed[i]["discipline"] + " (" + list_speed[i]["notes"] + ")\n" + list_speed[i]["time"] \
+                            + "\n\n"
+            else:
+                if list_speed[i]["place"] is not None:
+                    text += list_speed[i]["discipline"] + "\n" + list_speed[i]["place"] + "\n" + list_speed[i]["time"] \
+                            + "\n\n"
+                else:
+                    text += list_speed[i]["discipline"] + list_speed[i]["time"] + "\n\n"
 
     return text
 
@@ -45,7 +58,10 @@ logging.basicConfig(level=logging.INFO)
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
-qurs = KeyboardButton('/qurs')
+route = KeyboardButton('Направление')
+button_route = ReplyKeyboardMarkup(resize_keyboard=True).add(route)
+
+qurs = KeyboardButton('Курс')
 button_qurs = ReplyKeyboardMarkup(resize_keyboard=True).add(qurs)
 
 start = KeyboardButton('/start')
@@ -55,7 +71,7 @@ restart = KeyboardButton('Обновить')
 button_restart = ReplyKeyboardMarkup(resize_keyboard=True).add(restart)
 
 help_comands = ReplyKeyboardMarkup(resize_keyboard=True).row(
-    qurs, start
+    qurs, start, route, restart
 )
 
 button1 = KeyboardButton('1️⃣')
@@ -64,14 +80,36 @@ button3 = KeyboardButton('3️⃣')
 button4 = KeyboardButton('4️⃣')
 button5 = KeyboardButton('5️⃣')
 
+nup1 = KeyboardButton('Юриспруденция')
+nup2 = KeyboardButton('Экономика')
+nup3 = KeyboardButton('Менеджмент')
+nup4 = KeyboardButton('Прикладная информатика')
+nup5 = KeyboardButton('Конструирование изделий легкой промышленности')
+nup6 = KeyboardButton('Реклама и связи с общественностью')
+nup7 = KeyboardButton('Сервис')
+nup8 = KeyboardButton('Хореографическое искусство')
+nup9 = KeyboardButton('Управление персоналом')
+nup10 = KeyboardButton('Журналистика')
+nup11 = KeyboardButton('Гостиничное дело')
+nup12 = KeyboardButton('Психология')
+nup13 = KeyboardButton('Туризм')
+
+skip1 = KeyboardButton('2 стр')
+skip2 = KeyboardButton('3 стр')
+skip3 = KeyboardButton('4 стр')
+
 markup1 = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).row(
     button1, button2, button3, button4, button5
 )
-
-
-@dp.message_handler(commands=['qurs'])
-async def process_qurs_command(message: types.Message):
-    await message.answer('Ваш курс', reply_markup=markup1)
+markup2 = ReplyKeyboardMarkup(one_time_keyboard=True).row(
+    nup1, nup2, nup3, nup4, skip1
+)
+markup3 = ReplyKeyboardMarkup(one_time_keyboard=True).row(
+    nup5, nup6, nup7, nup8, skip2
+)
+markup4 = ReplyKeyboardMarkup(one_time_keyboard=True).row(
+    nup9, nup10, nup11, nup12, nup13
+)
 
 
 @dp.message_handler(commands=['help'])
@@ -81,45 +119,39 @@ async def process_help_command(message: types.Message):
 
 @dp.message_handler(commands=['start'])
 async def process_start_command(message: types.Message):
-    await message.answer("Привет, я бот который скидывает расписание\n\nby Ащев Даниил", reply_markup=button_qurs)
+    await message.answer("Привет, я бот который скидывает расписание\n\nby Ащев Даниил", reply_markup=button_route)
 
 
 @dp.message_handler()
 async def echo(message: types.Message):
     if message.text == '1️⃣':
         await message.answer(TimeList(4, 1, 792), reply_markup=button_restart)
-        f = open('index.txt', 'w')
-        f.write('1')
+
     if message.text == '2️⃣':
         await message.answer(TimeList(4, 2, 793), reply_markup=button_restart)
-        f = open('index.txt', 'w')
-        f.write('2')
+
     if message.text == '3️⃣':
         await message.answer(TimeList(4, 3, 795), reply_markup=button_restart)
-        f = open('index.txt', 'w')
-        f.write('3')
+
     if message.text == '4️⃣':
         await message.answer(TimeList(4, 4, 794), reply_markup=button_restart)
-        f = open('index.txt', 'w')
-        f.write('4')
+
     if message.text == '5️⃣':
         await message.answer(TimeList(4, 5, 0), reply_markup=button_restart)
-        f = open('index.txt', 'w')
-        f.write('5')
 
     if message.text == 'Обновить':
-        f = open('index.txt', 'r')
+        await message.answer(TimeList(4, 1, 792), reply_markup=button_restart)
 
-        if f.read() == '1':
-            await message.answer(TimeList(4, 1, 792), reply_markup=button_restart)
-        if f.read() == '2':
-            await message.answer(TimeList(4, 2, 793), reply_markup=button_restart)
-        if f.read() == '3':
-            await message.answer(TimeList(4, 3, 795), reply_markup=button_restart)
-        if f.read() == '4':
-            await message.answer(TimeList(4, 4, 794), reply_markup=button_restart)
-        if f.read() == '5':
-            await message.answer(TimeList(4, 5, 0), reply_markup=button_restart)
+    if message.text == 'Курс':
+        await message.answer('Ваш курс', reply_markup=markup1)
+
+    if message.text == 'Направление':
+        await message.answer('Ваше направление', reply_markup=markup2)
+
+    if message.text == '2 стр':
+        await message.answer('.', reply_markup=markup3)
+    if message.text == '3 стр':
+        await message.answer('.', reply_markup=markup4)
 
 
 if __name__ == '__main__':
