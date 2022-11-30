@@ -1,5 +1,6 @@
 import logging
 import json
+import sqlite3
 from datetime import datetime
 
 import requests
@@ -8,16 +9,30 @@ from aiogram.types import ReplyKeyboardRemove, \
     ReplyKeyboardMarkup, KeyboardButton, \
     InlineKeyboardMarkup, InlineKeyboardButton
 
-k_time = 0
 
-
-def TimeList(speciality_num, course_num, group_num):
+def TimeList(index):
     __URL = 'https://gu-ural.ru/wp-admin/admin-ajax.php'
 
+    connect = sqlite3.connect('users.db')
+    cursor = connect.cursor()
+
+    connect.commit()
+
+    s = ''
+    c = ''
+    g = ''
+
+    for speciality_num in cursor.execute(f"SELECT speciality_id FROM login_id WHERE id = {index}"):
+        s += (str(speciality_num)[1])
+    for course_num in cursor.execute(f"SELECT course_id FROM login_id WHERE id = {index}"):
+        c += (str(course_num)[1])
+    for group_num in cursor.execute(f"SELECT group_id FROM login_id WHERE id = {index}"):
+        g += str(group_num)[1:4]
+
     col = {'form': '1',
-           'speciality': speciality_num,
-           'course': course_num,
-           'group': group_num,
+           'speciality': s,
+           'course': c,
+           'group': g,
            'teacher': '',
            'action': 'lau_shedule_students_show'
            }
@@ -124,23 +139,70 @@ async def process_start_command(message: types.Message):
 
 @dp.message_handler()
 async def echo(message: types.Message):
+    connect = sqlite3.connect('users.db')
+    cursor = connect.cursor()
+
+    cursor.execute("""CREATE TABLE IF NOT EXISTS login_id(
+            id INTEGER,
+            speciality_id STRING NOT NULL DEFAULT '4',
+            course_id STRING NOT NULL DEFAULT '1',
+            group_id STRING NOT NULL DEFAULT '792'
+        )""")
+
+    connect.commit()
+
+    people_id = message.chat.id
+
+    cursor.execute(f"SELECT id FROM login_id WHERE id = {people_id}")
+    data = cursor.fetchone()
+
+    if data is None:
+        cursor.execute(f"INSERT INTO login_id VALUES({people_id}, 4, 1, 792);")
+        connect.commit()
+
     if message.text == '1️⃣':
-        await message.answer(TimeList(4, 1, 792), reply_markup=button_restart)
+        cursor.execute(f"UPDATE login_id SET course_id = 1, group_id = 792 WHERE id = {people_id};")
+        connect.commit()
+        await message.answer(TimeList(people_id), reply_markup=button_restart)
 
     if message.text == '2️⃣':
-        await message.answer(TimeList(4, 2, 793), reply_markup=button_restart)
+        cursor.execute(f"UPDATE login_id SET course_id = 2, group_id = 793 WHERE id = {people_id};")
+        connect.commit()
+        await message.answer(TimeList(people_id), reply_markup=button_restart)
 
     if message.text == '3️⃣':
-        await message.answer(TimeList(4, 3, 795), reply_markup=button_restart)
+        cursor.execute(f"UPDATE login_id SET course_id = 3, group_id = 795 WHERE id = {people_id};")
+        connect.commit()
+        await message.answer(TimeList(people_id), reply_markup=button_restart)
 
     if message.text == '4️⃣':
-        await message.answer(TimeList(4, 4, 794), reply_markup=button_restart)
+        cursor.execute(f"UPDATE login_id SET course_id = 4, group_id = 794 WHERE id = {people_id};")
+        connect.commit()
+        await message.answer(TimeList(people_id), reply_markup=button_restart)
 
     if message.text == '5️⃣':
-        await message.answer(TimeList(4, 5, 0), reply_markup=button_restart)
+        cursor.execute(f"UPDATE login_id SET course_id = 5 WHERE id = {people_id};")
+        connect.commit()
+        await message.answer(TimeList(people_id), reply_markup=button_restart)
+
+    if message.text == nup1.text:
+    if message.text == nup2.text:
+    if message.text == nup3.text:
+    if message.text == nup4.text:
+    if message.text == nup5.text:
+    if message.text == nup6.text:
+    if message.text == nup7.text:
+    if message.text == nup8.text:
+    if message.text == nup9.text:
+    if message.text == nup10.text:
+    if message.text == nup11.text:
+    if message.text == nup12.text:
+    if message.text == nup13.text:
+
+
 
     if message.text == 'Обновить':
-        await message.answer(TimeList(4, 1, 792), reply_markup=button_restart)
+        await message.answer(TimeList(people_id), reply_markup=button_restart)
 
     if message.text == 'Курс':
         await message.answer('Ваш курс', reply_markup=markup1)
@@ -152,6 +214,8 @@ async def echo(message: types.Message):
         await message.answer('.', reply_markup=markup3)
     if message.text == '3 стр':
         await message.answer('.', reply_markup=markup4)
+
+    # await message.answer(TimeList(people_id), reply_markup=button_restart)
 
 
 if __name__ == '__main__':
