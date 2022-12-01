@@ -8,7 +8,7 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 
-def TimeList(groups, index):
+def TimeList(index):
     __URL = 'https://gu-ural.ru/wp-admin/admin-ajax.php'
 
     connect = sqlite3.connect('users.db')
@@ -16,15 +16,9 @@ def TimeList(groups, index):
 
     connect.commit()
 
-    speciality = ''
-    course = ''
     group = ''
 
-    for speciality_num in cursor.execute(f"SELECT speciality_id FROM login_id WHERE id = {index}"):
-        speciality += (str(speciality_num)[1:3])
-    for course_num in cursor.execute(f"SELECT course_id FROM login_id WHERE id = {index}"):
-        course += (str(course_num)[1])
-    for group_num in cursor.execute(f"SELECT {groups} FROM login_id WHERE id = {index}"):
+    for group_num in cursor.execute(f"SELECT group_id FROM login_id WHERE id = {index}"):
         group += str(group_num)[1:4]
 
     col = {'form': '1',
@@ -42,21 +36,40 @@ def TimeList(groups, index):
         if list_speed[i]["weekday"] == str(day):
             if list_speed[i]["notes"] != "":
                 if list_speed[i]["place"] is not None:
+                    if list_speed[i]["classroom"] == "":
+                        text += list_speed[i]["discipline"] + " (" + list_speed[i]["notes"] + ")\n" \
+                                + list_speed[i]["place"] \
+                                + "\n" + list_speed[i]["time"] \
+                                + "\n\n"
                     text += list_speed[i]["discipline"] + " (" + list_speed[i]["notes"] + ")\n" \
                             + list_speed[i]["place"] \
+                            + "\n" + "ауд. " + list_speed[i]["classroom"] \
                             + "\n" + list_speed[i]["time"] \
                             + "\n\n"
                 else:
+                    if list_speed[i]["classroom"] == "":
+                        text += list_speed[i]["discipline"] + " (" + list_speed[i]["notes"] + ")\n" \
+                                + list_speed[i]["time"] \
+                                + "\n\n"
                     text += list_speed[i]["discipline"] + " (" + list_speed[i]["notes"] + ")\n" \
-                            + list_speed[i]["time"] \
+                            + "ауд. " + list_speed[i]["classroom"] \
+                            + "\n" + list_speed[i]["time"] \
                             + "\n\n"
             else:
                 if list_speed[i]["place"] is not None:
+                    if list_speed[i]["classroom"] == "":
+                        text += list_speed[i]["discipline"] + "\n" + list_speed[i]["place"] + "\n" \
+                                + list_speed[i]["time"] \
+                                + "\n\n"
                     text += list_speed[i]["discipline"] + "\n" + list_speed[i]["place"] + "\n" \
-                            + list_speed[i]["time"] \
+                            + "ауд. " + list_speed[i]["classroom"] \
+                            + "\n" + list_speed[i]["time"] \
                             + "\n\n"
                 else:
-                    text += list_speed[i]["discipline"] + "\n" + list_speed[i]["time"] + "\n\n"
+                    if list_speed[i]["classroom"] == "":
+                        text += list_speed[i]["discipline"] + "\n" + list_speed[i]["time"] + "\n\n"
+
+                    text += list_speed[i]["discipline"] + "\n" + list_speed[i]["time"] + "\n" + "\n\n"
 
     text += "Завтра:\n\n"
 
@@ -64,21 +77,40 @@ def TimeList(groups, index):
         if list_speed[i]["weekday"] == str(day + 1):
             if list_speed[i]["notes"] != "":
                 if list_speed[i]["place"] is not None:
+                    if list_speed[i]["classroom"] == "":
+                        text += list_speed[i]["discipline"] + " (" + list_speed[i]["notes"] + ")\n" \
+                                + list_speed[i]["place"] \
+                                + "\n" + list_speed[i]["time"] \
+                                + "\n\n"
                     text += list_speed[i]["discipline"] + " (" + list_speed[i]["notes"] + ")\n" \
                             + list_speed[i]["place"] \
+                            + "\n" + list_speed[i]["classroom"] \
                             + "\n" + list_speed[i]["time"] \
                             + "\n\n"
                 else:
+                    if list_speed[i]["classroom"] == "":
+                        text += list_speed[i]["discipline"] + " (" + list_speed[i]["notes"] + ")\n" \
+                                + list_speed[i]["time"] \
+                                + "\n\n"
                     text += list_speed[i]["discipline"] + " (" + list_speed[i]["notes"] + ")\n" \
-                            + list_speed[i]["time"] \
+                            + "ауд. " + list_speed[i]["classroom"] \
+                            + "\n" + list_speed[i]["time"] \
                             + "\n\n"
             else:
                 if list_speed[i]["place"] is not None:
+                    if list_speed[i]["classroom"] == "":
+                        text += list_speed[i]["discipline"] + "\n" + list_speed[i]["place"] + "\n" \
+                                + list_speed[i]["time"] \
+                                + "\n\n"
                     text += list_speed[i]["discipline"] + "\n" + list_speed[i]["place"] + "\n" \
-                            + list_speed[i]["time"] \
+                            + "ауд. " + list_speed[i]["classroom"] \
+                            + "\n" + list_speed[i]["time"] \
                             + "\n\n"
                 else:
-                    text += list_speed[i]["discipline"] + "\n" + list_speed[i]["time"] + "\n\n"
+                    if list_speed[i]["classroom"] == "":
+                        text += list_speed[i]["discipline"] + "\n" + list_speed[i]["time"] + "\n\n"
+
+                    text += list_speed[i]["discipline"] + "\n" + list_speed[i]["time"] + "\n" + "\n\n"
 
     return text
 
@@ -137,7 +169,7 @@ markup1 = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).row(
     button1, button2, button3, button4
 )
 markup2 = ReplyKeyboardMarkup(one_time_keyboard=True).row(
-    nup1, nup2, nup3, nup4, skip1
+    nup2, nup3, nup4, skip1
 )
 markup3 = ReplyKeyboardMarkup(one_time_keyboard=True).row(
     nup6, nup7, nup8, nup9, skip2
@@ -154,7 +186,7 @@ async def process_help_command(message: types.Message):
 
 @dp.message_handler(commands=['start'])
 async def process_start_command(message: types.Message):
-    await message.answer("Привет, я бот который скидывает расписание\n\nby Ащев Даниил", reply_markup=button_route)
+    await message.answer("Привет, я бот который скидывает расписание\n\nby @Aweyout", reply_markup=button_route)
 
 
 @dp.message_handler()
@@ -166,10 +198,7 @@ async def echo(message: types.Message):
             id INTEGER,
             speciality_id STRING NOT NULL DEFAULT '4',
             course_id STRING NOT NULL DEFAULT '1',
-            group1_id STRING NOT NULL DEFAULT '0',
-            group2_id STRING NOT NULL DEFAULT '0',
-            group3_id STRING NOT NULL DEFAULT '0',
-            group4_id STRING NOT NULL DEFAULT '0'
+            group_id STRING NOT NULL DEFAULT '792'
         )""")
 
     connect.commit()
@@ -180,89 +209,226 @@ async def echo(message: types.Message):
     data = cursor.fetchone()
 
     if data is None:
-        cursor.execute(f"INSERT INTO login_id VALUES({people_id}, 4, 1, 794, 794, 794, 794);")
+        cursor.execute(f"INSERT INTO login_id VALUES({people_id}, 4, 1, 794);")
         connect.commit()
 
     speciality = ''
     for speciality_num in cursor.execute(f"SELECT speciality_id FROM login_id WHERE id = {people_id}"):
-        speciality += (str(speciality_num)[1:3])
+        if str(speciality_num)[2] != ',':
+            speciality += (str(speciality_num)[1:3])
+        else:
+            speciality += (str(speciality_num)[1])
+
+    connect.commit()
 
     if message.text == '1️⃣':
-        await message.answer(TimeList('group1_id', people_id), reply_markup=button_restart)
+        # if speciality == '1':
+        #     cursor.execute(f"UPDATE login_id SET group_id = 0 WHERE id = {people_id};")
+        #     connect.commit()
+        #     await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '2':
+            cursor.execute(f"UPDATE login_id SET group_id = 797 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '3':
+            cursor.execute(f"UPDATE login_id SET group_id = 783 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '4':
+            cursor.execute(f"UPDATE login_id SET group_id = 792 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '6':
+            cursor.execute(f"UPDATE login_id SET group_id = 787 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '7':
+            cursor.execute(f"UPDATE login_id SET group_id = 789 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '8':
+            cursor.execute(f"UPDATE login_id SET group_id = 835 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '9':
+            cursor.execute(f"UPDATE login_id SET group_id = 786 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '10':
+            cursor.execute(f"UPDATE login_id SET group_id = 791 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '11':
+            cursor.execute(f"UPDATE login_id SET group_id = 788 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '12':
+            cursor.execute(f"UPDATE login_id SET group_id = 782 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '13':
+            cursor.execute(f"UPDATE login_id SET group_id = 790 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
 
     if message.text == '2️⃣':
-        await message.answer(TimeList('group2_id', people_id), reply_markup=button_restart)
+        if speciality == '1':
+            cursor.execute(f"UPDATE login_id SET group_id = 804 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '2':
+            cursor.execute(f"UPDATE login_id SET group_id = 798 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        # if speciality == '3':
+        #     cursor.execute(f"UPDATE login_id SET group_id = 0 WHERE id = {people_id};")
+        #     connect.commit()
+        #     await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '4':
+            cursor.execute(f"UPDATE login_id SET group_id = 793 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '6':
+            cursor.execute(f"UPDATE login_id SET group_id = 820 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '7':
+            cursor.execute(f"UPDATE login_id SET group_id = 822 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '8':
+            cursor.execute(f"UPDATE login_id SET group_id = 836 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        # if speciality == '9':
+        #     cursor.execute(f"UPDATE login_id SET group_id = 0 WHERE id = {people_id};")
+        #     connect.commit()
+        #     await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '10':
+            cursor.execute(f"UPDATE login_id SET group_id = 803 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '11':
+            cursor.execute(f"UPDATE login_id SET group_id = 823 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        # if speciality == '12':
+        #     cursor.execute(f"UPDATE login_id SET group_id = 782 WHERE id = {people_id};")
+        #     connect.commit()
+        #     await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '13':
+            cursor.execute(f"UPDATE login_id SET group_id = 824 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
 
     if message.text == '3️⃣':
-        await message.answer(TimeList('group3_id', people_id), reply_markup=button_restart)
+        if speciality == '1':
+            cursor.execute(f"UPDATE login_id SET group_id = 806 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '2':
+            cursor.execute(f"UPDATE login_id SET group_id = 802 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+            cursor.execute(f"UPDATE login_id SET group_id = 799 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '3':
+            cursor.execute(f"UPDATE login_id SET group_id = 801 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '4':
+            cursor.execute(f"UPDATE login_id SET group_id = 795 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '6':
+            cursor.execute(f"UPDATE login_id SET group_id = 821 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '7':
+            cursor.execute(f"UPDATE login_id SET group_id = 825 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '8':
+            cursor.execute(f"UPDATE login_id SET group_id = 837 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '9':
+            cursor.execute(f"UPDATE login_id SET group_id = 819 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '10':
+            cursor.execute(f"UPDATE login_id SET group_id = 805 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '11':
+            cursor.execute(f"UPDATE login_id SET group_id = 827 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '12':
+            cursor.execute(f"UPDATE login_id SET group_id = 810 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '13':
+            cursor.execute(f"UPDATE login_id SET group_id = 826 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
 
     if message.text == '4️⃣':
-        await message.answer(TimeList('group4_id', people_id), reply_markup=button_restart)
-
-    # if message.text == nup1.text:
-    #     cursor.execute(f"UPDATE login_id SET speciality_id = 1 WHERE id = {people_id};")
-    #     await message.answer('Ваш курс', reply_markup=markup1)
-    # if message.text == nup2.text:
-    #     cursor.execute(f"UPDATE login_id SET speciality_id = 2 WHERE id = {people_id};")
-    #     await message.answer('Ваш курс', reply_markup=markup1)
-    # if message.text == nup3.text:
-    #     cursor.execute(f"UPDATE login_id SET speciality_id = 3 WHERE id = {people_id};")
-    #     await message.answer('Ваш курс', reply_markup=markup1)
-    if message.text == nup4.text:
-        cursor.execute(f"UPDATE login_id SET "
-                       f"group1_id = 792, "
-                       f"group2_id = 793, "
-                       f"group3_id = 795, "
-                       f"group4_id = 794 WHERE id = {people_id};")
-        await message.answer('Ваш курс', reply_markup=markup1)
-
-    # if message.text == nup6.text:
-    #     cursor.execute(f"UPDATE login_id SET speciality_id = 6 WHERE id = {people_id};")
-    #     await message.answer('Ваш курс', reply_markup=markup1)
-    # if message.text == nup7.text:
-    #     cursor.execute(f"UPDATE login_id SET speciality_id = 7 WHERE id = {people_id};")
-    #     await message.answer('Ваш курс', reply_markup=markup1)
-    # if message.text == nup8.text:
-    #     cursor.execute(f"UPDATE login_id SET speciality_id = 8 WHERE id = {people_id};")
-    #     await message.answer('Ваш курс', reply_markup=markup1)
-    # if message.text == nup9.text:
-    #     cursor.execute(f"UPDATE login_id SET speciality_id = 9 WHERE id = {people_id};")
-    #     await message.answer('Ваш курс', reply_markup=markup1)
-    # if message.text == nup10.text:
-    #     cursor.execute(f"UPDATE login_id SET speciality_id = 10 WHERE id = {people_id};")
-    #     await message.answer('Ваш курс', reply_markup=markup1)
-    # if message.text == nup11.text:
-    #     cursor.execute(f"UPDATE login_id SET speciality_id = 11 WHERE id = {people_id};")
-    #     await message.answer('Ваш курс', reply_markup=markup1)
-    # if message.text == nup12.text:
-    #     cursor.execute(f"UPDATE login_id SET speciality_id = 12 WHERE id = {people_id};")
-    #     await message.answer('Ваш курс', reply_markup=markup1)
-    # if message.text == nup13.text:
-    #     cursor.execute(f"UPDATE login_id SET speciality_id = 13 WHERE id = {people_id};")
-    #     await message.answer('Ваш курс', reply_markup=markup1)
-
-    gr1 = ''
-    for gr1_num in cursor.execute(f"SELECT group1_id FROM login_id WHERE id = {people_id}"):
-        gr1 += (str(gr1_num)[1:4])
-    gr2 = ''
-    for gr2_num in cursor.execute(f"SELECT group2_id FROM login_id WHERE id = {people_id}"):
-        gr2 += (str(gr2_num)[1:4])
-    gr3 = ''
-    for gr3_num in cursor.execute(f"SELECT group3_id FROM login_id WHERE id = {people_id}"):
-        gr3 += (str(gr3_num)[1:4])
-    gr4 = ''
-    for gr4_num in cursor.execute(f"SELECT group4_id FROM login_id WHERE id = {people_id}"):
-        gr4 += (str(gr4_num)[1:4])
+        if speciality == '1':
+            cursor.execute(f"UPDATE login_id SET group_id = 808 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '2':
+            cursor.execute(f"UPDATE login_id SET group_id = 817 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+            cursor.execute(f"UPDATE login_id SET group_id = 816 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '3':
+            cursor.execute(f"UPDATE login_id SET group_id = 814 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '4':
+            cursor.execute(f"UPDATE login_id SET group_id = 794 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        # if speciality == '6':
+        #     cursor.execute(f"UPDATE login_id SET group_id = 821 WHERE id = {people_id};")
+        #     connect.commit()
+        #     await message.answer(TimeList(people_id), reply_markup=button_restart)
+        # if speciality == '7':
+        #     cursor.execute(f"UPDATE login_id SET group_id = 825 WHERE id = {people_id};")
+        #     connect.commit()
+        #     await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '8':
+            cursor.execute(f"UPDATE login_id SET group_id = 838 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '9':
+            cursor.execute(f"UPDATE login_id SET group_id = 818 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '10':
+            cursor.execute(f"UPDATE login_id SET group_id = 807 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        # if speciality == '11':
+        #     cursor.execute(f"UPDATE login_id SET group_id = 827 WHERE id = {people_id};")
+        #     connect.commit()
+        #     await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if speciality == '12':
+            cursor.execute(f"UPDATE login_id SET group_id = 811 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id), reply_markup=button_restart)
+        # if speciality == '13':
+        #     cursor.execute(f"UPDATE login_id SET group_id = 826 WHERE id = {people_id};")
+        #     connect.commit()
+        #     await message.answer(TimeList(people_id), reply_markup=button_restart)
 
     if message.text == 'Обновить':
-        if gr1 != '0':
-            await message.answer(TimeList('group1_id', people_id), reply_markup=button_restart)
-        if gr2 != '0':
-            await message.answer(TimeList('group2_id', people_id), reply_markup=button_restart)
-        if gr3 != '0':
-            await message.answer(TimeList('group3_id', people_id), reply_markup=button_restart)
-        if gr4 != '0':
-            await message.answer(TimeList('group4_id', people_id), reply_markup=button_restart)
+        await message.answer(TimeList(people_id), reply_markup=button_restart)
 
     if message.text == 'Курс':
         await message.answer('Ваш курс', reply_markup=markup1)
@@ -275,7 +441,54 @@ async def echo(message: types.Message):
     if message.text == '3 стр':
         await message.answer('.', reply_markup=markup4)
 
-    # await message.answer(TimeList(people_id), reply_markup=button_restart)
+    if message.text == nup1.text:
+        cursor.execute(f"UPDATE login_id SET speciality_id = 1 WHERE id = {people_id};")
+        connect.commit()
+        await message.answer('Ваш курс', reply_markup=markup1)
+    if message.text == nup2.text:
+        cursor.execute(f"UPDATE login_id SET speciality_id = 2 WHERE id = {people_id};")
+        connect.commit()
+        await message.answer('Ваш курс', reply_markup=markup1)
+    if message.text == nup3.text:
+        cursor.execute(f"UPDATE login_id SET speciality_id = 3 WHERE id = {people_id};")
+        connect.commit()
+        await message.answer('Ваш курс', reply_markup=markup1)
+    if message.text == nup4.text:
+        cursor.execute(f"UPDATE login_id SET speciality_id = 4 WHERE id = {people_id};")
+        connect.commit()
+        await message.answer('Ваш курс', reply_markup=markup1)
+    if message.text == nup6.text:
+        cursor.execute(f"UPDATE login_id SET speciality_id = 6 WHERE id = {people_id};")
+        connect.commit()
+        await message.answer('Ваш курс', reply_markup=markup1)
+    if message.text == nup7.text:
+        cursor.execute(f"UPDATE login_id SET speciality_id = 7 WHERE id = {people_id};")
+        connect.commit()
+        await message.answer('Ваш курс', reply_markup=markup1)
+    if message.text == nup8.text:
+        cursor.execute(f"UPDATE login_id SET speciality_id = 8 WHERE id = {people_id};")
+        connect.commit()
+        await message.answer('Ваш курс', reply_markup=markup1)
+    if message.text == nup9.text:
+        cursor.execute(f"UPDATE login_id SET speciality_id = 9 WHERE id = {people_id};")
+        connect.commit()
+        await message.answer('Ваш курс', reply_markup=markup1)
+    if message.text == nup10.text:
+        cursor.execute(f"UPDATE login_id SET speciality_id = 10 WHERE id = {people_id};")
+        connect.commit()
+        await message.answer('Ваш курс', reply_markup=markup1)
+    if message.text == nup11.text:
+        cursor.execute(f"UPDATE login_id SET speciality_id = 11 WHERE id = {people_id};")
+        connect.commit()
+        await message.answer('Ваш курс', reply_markup=markup1)
+    if message.text == nup12.text:
+        cursor.execute(f"UPDATE login_id SET speciality_id = 12 WHERE id = {people_id};")
+        connect.commit()
+        await message.answer('Ваш курс', reply_markup=markup1)
+    if message.text == nup13.text:
+        cursor.execute(f"UPDATE login_id SET speciality_id = 13 WHERE id = {people_id};")
+        connect.commit()
+        await message.answer('Ваш курс', reply_markup=markup1)
 
 
 if __name__ == '__main__':
