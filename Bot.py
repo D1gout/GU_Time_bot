@@ -3,6 +3,7 @@ import logging
 import sqlite3
 from datetime import datetime
 
+import pendulum
 import requests
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
@@ -31,11 +32,12 @@ def TimeList(index):
     list = json.loads(req)
     list_speed = list["current"]["data"]
     text = ''
-    day = datetime.today().isoweekday()
+    day = pendulum.today().format('DD.MM.YYYY')
+    nextDay = pendulum.tomorrow().format('DD.MM.YYYY')
     for i in range(len(list_speed)):
         if list_speed[i]["discipline"] != "" or list_speed[i]["discipline"] is not None:
             if list_speed[i]["place"] != "" or list_speed[i]["place"] is not None:
-                if list_speed[i]["weekday"] == str(day):
+                if list_speed[i]["date"] == day:
                     if list_speed[i]["notes"] != "":
                         if list_speed[i]["place"] is not None:
                             if list_speed[i]["classroom"] == "" or list_speed[i]["classroom"] is None:
@@ -79,10 +81,12 @@ def TimeList(index):
 
     text += "Завтра:\n\n"
 
+    list_speed = list["next"]["data"]
+
     for i in range(len(list_speed)):
         if list_speed[i]["discipline"] != "" or list_speed[i]["discipline"] is not None:
             if list_speed[i]["place"] != "" or list_speed[i]["place"] is not None:
-                if list_speed[i]["weekday"] == str(day + 1):
+                if list_speed[i]["date"] == str(nextDay):
                     if list_speed[i]["notes"] != "":
                         if list_speed[i]["place"] is not None:
                             if list_speed[i]["classroom"] == "" or list_speed[i]["classroom"] is None:
