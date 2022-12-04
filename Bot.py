@@ -47,10 +47,10 @@ def TimeList(index):
                                         + "\n\n"
                             else:
                                 text += list_speed[i]["discipline"] + " (" + list_speed[i]["notes"] + ")\n" \
-                                    + list_speed[i]["place"] \
-                                    + "\n" + "ауд. " + list_speed[i]["classroom"] \
-                                    + "\n" + list_speed[i]["time"] \
-                                    + "\n\n"
+                                        + list_speed[i]["place"] \
+                                        + "\n" + "ауд. " + list_speed[i]["classroom"] \
+                                        + "\n" + list_speed[i]["time"] \
+                                        + "\n\n"
                         else:
                             if list_speed[i]["classroom"] == "" or list_speed[i]["classroom"] is None:
                                 text += list_speed[i]["discipline"] + " (" + list_speed[i]["notes"] + ")\n" \
@@ -58,9 +58,9 @@ def TimeList(index):
                                         + "\n\n"
                             else:
                                 text += list_speed[i]["discipline"] + " (" + list_speed[i]["notes"] + ")\n" \
-                                    + "ауд. " + list_speed[i]["classroom"] \
-                                    + "\n" + list_speed[i]["time"] \
-                                    + "\n\n"
+                                        + "ауд. " + list_speed[i]["classroom"] \
+                                        + "\n" + list_speed[i]["time"] \
+                                        + "\n\n"
                     else:
                         if list_speed[i]["place"] is not None:
                             if list_speed[i]["classroom"] == "" or list_speed[i]["classroom"] is None:
@@ -69,9 +69,9 @@ def TimeList(index):
                                         + "\n\n"
                             else:
                                 text += list_speed[i]["discipline"] + "\n" + list_speed[i]["place"] + "\n" \
-                                    + "ауд. " + list_speed[i]["classroom"] \
-                                    + "\n" + list_speed[i]["time"] \
-                                    + "\n\n"
+                                        + "ауд. " + list_speed[i]["classroom"] \
+                                        + "\n" + list_speed[i]["time"] \
+                                        + "\n\n"
                         else:
                             if list_speed[i]["classroom"] == "" or list_speed[i]["classroom"] is None:
                                 text += list_speed[i]["discipline"] + "\n" + list_speed[i]["time"] + "\n\n"
@@ -149,6 +149,9 @@ button_route = ReplyKeyboardMarkup(resize_keyboard=True).add(route)
 qurs = KeyboardButton('Курс')
 button_qurs = ReplyKeyboardMarkup(resize_keyboard=True).add(qurs)
 
+info = KeyboardButton('/info')
+button_info = ReplyKeyboardMarkup(resize_keyboard=True).add(qurs)
+
 start = KeyboardButton('/start')
 button_start = ReplyKeyboardMarkup(resize_keyboard=True).add(start)
 
@@ -156,7 +159,7 @@ restart = KeyboardButton('Обновить')
 button_restart = ReplyKeyboardMarkup(resize_keyboard=True).add(restart)
 
 help_comands = ReplyKeyboardMarkup(resize_keyboard=True).row(
-    qurs, start, route, restart
+    qurs, start, route, restart, info
 )
 
 button1 = KeyboardButton('1️⃣')
@@ -198,6 +201,11 @@ markup4 = ReplyKeyboardMarkup(one_time_keyboard=True).row(
 @dp.message_handler(commands=['help'])
 async def process_help_command(message: types.Message):
     await message.answer('Мои команды', reply_markup=help_comands)
+
+
+@dp.message_handler(commands=['info'])
+async def process_info_command(message: types.Message):
+    await message.answer('Версия 1.1\n\nОбновил вывод расписания на следующую неделю', reply_markup=button_restart)
 
 
 @dp.message_handler(commands=['start'])
