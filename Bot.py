@@ -230,6 +230,7 @@ async def process_start_command(message: types.Message):
 async def echo(message: types.Message):
     connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
+
     cursor.execute("""CREATE TABLE IF NOT EXISTS login_id(
             id INTEGER,
             speciality_id STRING NOT NULL DEFAULT '0',
