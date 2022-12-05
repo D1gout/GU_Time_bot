@@ -34,6 +34,7 @@ def TimeList(index):
     text = ''
     day = pendulum.today().format('DD.MM.YYYY')
     nextDay = pendulum.tomorrow().format('DD.MM.YYYY')
+    weekday = datetime.today().weekday()
     for i in range(len(list_speed)):
         if list_speed[i]["discipline"] != "" or list_speed[i]["discipline"] is not None:
             if list_speed[i]["place"] != "" or list_speed[i]["place"] is not None:
@@ -83,10 +84,13 @@ def TimeList(index):
 
     list_speed = list["next"]["data"]
 
+    if weekday != '7':
+        list_speed = list["current"]["data"]
+
     for i in range(len(list_speed)):
         if list_speed[i]["discipline"] != "" or list_speed[i]["discipline"] is not None:
             if list_speed[i]["place"] != "" or list_speed[i]["place"] is not None:
-                if list_speed[i]["date"] == str(nextDay):
+                if list_speed[i]["date"] == nextDay:
                     if list_speed[i]["notes"] != "":
                         if list_speed[i]["place"] is not None:
                             if list_speed[i]["classroom"] == "" or list_speed[i]["classroom"] is None:
