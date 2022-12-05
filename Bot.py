@@ -18,9 +18,19 @@ def TimeList(index):
     connect.commit()
 
     group = ''
+    error = ''
 
     for group_num in cursor.execute(f"SELECT group_id FROM login_id WHERE id = {index}"):
         group += str(group_num)[1:4]
+
+    for group_error in cursor.execute(f"SELECT group_id FROM login_id WHERE id = {index}"):
+        error += str(group_error)[1]
+
+    text = ''
+
+    if error == '0':
+        text = "Пожалуйста пересоздайте аккаунт\n\nP.S. скорее всего я что-то обновил)"
+        return text
 
     col = {'form': '1',
            'group': group,
@@ -31,10 +41,9 @@ def TimeList(index):
 
     list = json.loads(req)
     list_speed = list["current"]["data"]
-    text = ''
     day = pendulum.today().format('DD.MM.YYYY')
     nextDay = pendulum.tomorrow().format('DD.MM.YYYY')
-    weekday = datetime.today().weekday()
+    weekday = datetime.today().isoweekday()
     for i in range(len(list_speed)):
         if list_speed[i]["discipline"] != "" or list_speed[i]["discipline"] is not None:
             if list_speed[i]["place"] != "" or list_speed[i]["place"] is not None:
@@ -224,9 +233,9 @@ async def echo(message: types.Message):
 
     cursor.execute("""CREATE TABLE IF NOT EXISTS login_id(
             id INTEGER,
-            speciality_id STRING NOT NULL DEFAULT '4',
-            course_id STRING NOT NULL DEFAULT '1',
-            group_id STRING NOT NULL DEFAULT '792'
+            speciality_id STRING NOT NULL DEFAULT '0',
+            course_id STRING NOT NULL DEFAULT '0',
+            group_id STRING NOT NULL DEFAULT '0'
         )""")
 
     connect.commit()
@@ -237,7 +246,7 @@ async def echo(message: types.Message):
     data = cursor.fetchone()
 
     if data is None:
-        cursor.execute(f"INSERT INTO login_id VALUES({people_id}, 4, 1, 794);")
+        cursor.execute(f"INSERT INTO login_id VALUES({people_id}, 0, 0, 0);")
         connect.commit()
 
     speciality = ''
