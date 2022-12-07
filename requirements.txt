@@ -25,3 +25,5 @@ SQLAlchemy==1.4.44
 urllib3==1.26.13
 yarl==1.8.1
 pendulum~=2.1.2
+redis~=4.4.0
+rq~=1.11.1

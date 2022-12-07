@@ -1,3 +1,4 @@
+import asyncio
 import json
 import logging
 import sqlite3
@@ -7,6 +8,8 @@ import pendulum
 import requests
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+
+auto = False
 
 
 def TimeList(index):
@@ -168,8 +171,13 @@ button_info = ReplyKeyboardMarkup(resize_keyboard=True).add(qurs)
 start = KeyboardButton('/start')
 button_start = ReplyKeyboardMarkup(resize_keyboard=True).add(start)
 
+on = KeyboardButton('/on')
+off = KeyboardButton('/off')
+
 restart = KeyboardButton('Обновить')
-button_restart = ReplyKeyboardMarkup(resize_keyboard=True).add(restart)
+button_restart = ReplyKeyboardMarkup(resize_keyboard=True).row(
+    restart, on, off
+)
 
 help_comands = ReplyKeyboardMarkup(resize_keyboard=True).row(
     qurs, start, route, restart, info
@@ -211,6 +219,29 @@ markup4 = ReplyKeyboardMarkup(one_time_keyboard=True).row(
 )
 
 
+@dp.message_handler(commands=['on'])
+async def process_autotime(message: types.Message):
+    global auto
+    if auto is False:
+        await message.answer('Включено авто-расписание в 21:00', reply_markup=button_restart)
+
+    auto = True
+    while auto:
+        await asyncio.sleep(20)
+        if datetime.now().strftime("%H:%M") == '21:00':
+            await message.answer(TimeList(message.chat.id))
+            await asyncio.sleep(60)
+
+
+@dp.message_handler(commands=['off'])
+async def process_autotime(message: types.Message):
+    global auto
+    if auto is True:
+        await message.answer('Выключено авто-расписание', reply_markup=button_restart)
+
+    auto = False
+
+
 @dp.message_handler(commands=['help'])
 async def process_help_command(message: types.Message):
     await message.answer('Мои команды', reply_markup=help_comands)
@@ -218,7 +249,7 @@ async def process_help_command(message: types.Message):
 
 @dp.message_handler(commands=['info'])
 async def process_info_command(message: types.Message):
-    await message.answer('Версия 1.1\n\nОбновил вывод расписания на следующую неделю', reply_markup=button_restart)
+    await message.answer('Версия 1.2\n\nДобавил авто-расписание в 21:00', reply_markup=button_restart)
 
 
 @dp.message_handler(commands=['start'])
@@ -241,7 +272,6 @@ async def echo(message: types.Message):
     connect.commit()
 
     people_id = message.chat.id
-
     cursor.execute(f"SELECT id FROM login_id WHERE id = {people_id}")
     data = cursor.fetchone()
 
