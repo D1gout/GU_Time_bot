@@ -9,8 +9,6 @@ import requests
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
-auto = False
-
 
 def TimeList(index):
     __URL = 'https://gu-ural.ru/wp-admin/admin-ajax.php'
@@ -220,26 +218,47 @@ markup4 = ReplyKeyboardMarkup(one_time_keyboard=True).row(
 
 
 @dp.message_handler(commands=['on'])
-async def process_autotime(message: types.Message):
-    global auto
-    if auto is False:
-        await message.answer('Включено авто-расписание в 21:00', reply_markup=button_restart)
+async def process_autotime_on(message: types.Message):
+    connect = sqlite3.connect('users.db')
+    cursor = connect.cursor()
 
-    auto = True
-    while auto:
-        await asyncio.sleep(20)
-        if datetime.now().strftime("%H:%M") == '21:00':
-            await message.answer(TimeList(message.chat.id))
-            await asyncio.sleep(60)
+    connect.commit()
+
+    auto = ''
+    for auto_num in cursor.execute(f"SELECT auto_time FROM login_id WHERE id = {message.chat.id}"):
+        auto += str(auto_num)[1]
+
+    if auto == '0':
+        await message.answer('Включено авто-расписание в 21:00', reply_markup=button_restart)
+        cursor.execute(f"UPDATE login_id SET auto_time = 1 WHERE id = {message.chat.id};")
+        connect.commit()
+
+        auto = ''
+        for auto_num in cursor.execute(f"SELECT auto_time FROM login_id WHERE id = {message.chat.id}"):
+            auto += str(auto_num)[1]
+
+        while auto == '1':
+            await asyncio.sleep(20)
+            if datetime.now().strftime("%H:%M") == '21:00':
+                await message.answer(TimeList(message.chat.id))
+                await asyncio.sleep(60)
 
 
 @dp.message_handler(commands=['off'])
-async def process_autotime(message: types.Message):
-    global auto
-    if auto is True:
-        await message.answer('Выключено авто-расписание', reply_markup=button_restart)
+async def process_autotime_off(message: types.Message):
+    connect = sqlite3.connect('users.db')
+    cursor = connect.cursor()
 
-    auto = False
+    connect.commit()
+
+    auto = ''
+    for auto_num in cursor.execute(f"SELECT auto_time FROM login_id WHERE id = {message.chat.id}"):
+        auto += str(auto_num)[1]
+
+    if auto == '1':
+        await message.answer('Выключено авто-расписание', reply_markup=button_restart)
+        cursor.execute(f"UPDATE login_id SET auto_time = 0 WHERE id = {message.chat.id};")
+        connect.commit()
 
 
 @dp.message_handler(commands=['help'])
@@ -266,7 +285,8 @@ async def echo(message: types.Message):
             id INTEGER,
             speciality_id STRING NOT NULL DEFAULT '0',
             course_id STRING NOT NULL DEFAULT '0',
-            group_id STRING NOT NULL DEFAULT '0'
+            group_id STRING NOT NULL DEFAULT '0',
+            auto_time STRING NOT NULL DEFAULT '0'
         )""")
 
     connect.commit()
@@ -276,7 +296,7 @@ async def echo(message: types.Message):
     data = cursor.fetchone()
 
     if data is None:
-        cursor.execute(f"INSERT INTO login_id VALUES({people_id}, 0, 0, 0);")
+        cursor.execute(f"INSERT INTO login_id VALUES({people_id}, 0, 0, 0, 0);")
         connect.commit()
 
     speciality = ''
