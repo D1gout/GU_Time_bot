@@ -669,7 +669,7 @@ async def echo(message: types.Message):
         cursor.execute(
             f"UPDATE login_id SET speciality_id = 2 WHERE id = {people_id};")
         connect.commit()
-        await message.answer('Ваша группа', reply_markup=markup5)
+        await message.answer('Ваш курс и группа', reply_markup=markup5)
     if message.text == nup3.text:
         cursor.execute(
             f"UPDATE login_id SET speciality_id = 3 WHERE id = {people_id};")
