@@ -255,7 +255,7 @@ markup4 = ReplyKeyboardMarkup(one_time_keyboard=True).row(
     nup10, nup11, nup12, nup13
 )
 markup5 = ReplyKeyboardMarkup(one_time_keyboard=True).row(
-    gr1, gr2, gr3, gr4
+    button1, button2, gr1, gr2, gr3, gr4
 )
 
 
@@ -666,11 +666,10 @@ async def echo(message: types.Message):
         connect.commit()
         await message.answer('Ваш курс', reply_markup=markup1)
     if message.text == nup2.text:
+        cursor.execute(
+            f"UPDATE login_id SET speciality_id = 2 WHERE id = {people_id};")
+        connect.commit()
         await message.answer('Ваша группа', reply_markup=markup5)
-        # cursor.execute(
-        #     f"UPDATE login_id SET speciality_id = 2 WHERE id = {people_id};")
-        # connect.commit()
-        # await message.answer('Ваш курс', reply_markup=markup1)
     if message.text == nup3.text:
         cursor.execute(
             f"UPDATE login_id SET speciality_id = 3 WHERE id = {people_id};")
