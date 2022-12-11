@@ -47,7 +47,7 @@ def TimeList(index):
     list_speed = list["current"]["data"]
     day = pendulum.today().format('DD.MM.YYYY')
     nextDay = pendulum.tomorrow().format('DD.MM.YYYY')
-    weekday = datetime.today().isoweekday()
+    weekday = str(datetime.today().isoweekday())
     for i in range(len(list_speed)):
         if list_speed[i]["discipline"] != "" or list_speed[i][
             "discipline"] is not None:
@@ -112,7 +112,7 @@ def TimeList(index):
 
     list_speed = list["next"]["data"]
 
-    if weekday != '7':
+    if weekday != "7":
         list_speed = list["current"]["data"]
 
     for i in range(len(list_speed)):
@@ -246,7 +246,7 @@ markup1 = ReplyKeyboardMarkup(resize_keyboard=True,
     button1, button2, button3, button4
 )
 markup2 = ReplyKeyboardMarkup(one_time_keyboard=True).row(
-    nup2, nup3, nup4, skip1
+    nup1, nup2, nup3, nup4, skip1
 )
 markup3 = ReplyKeyboardMarkup(one_time_keyboard=True).row(
     nup6, nup7, nup8, nup9, skip2
