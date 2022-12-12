@@ -2,12 +2,15 @@ import asyncio
 import json
 import logging
 import sqlite3
+import threading
 from datetime import datetime
 
 import pendulum
 import requests
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+
+from config import TOKEN, MY_ID, DB_FILENAME
 
 
 def TimeList(index):
@@ -178,11 +181,6 @@ def TimeList(index):
     return text
 
 
-# Токен, ID создателя, Имя базы данных
-TOKEN = '5975391066:AAEHxpuSeVYz4fidfGbV61zuKN4zOrxGvDY'
-MY_ID = '706967790'
-DB_FILENAME = 'db_bot'
-
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
@@ -259,6 +257,29 @@ markup5 = ReplyKeyboardMarkup(one_time_keyboard=True).row(
 )
 
 
+async def AutoTime():
+    connect = sqlite3.connect('users.db')
+    cursor = connect.cursor()
+
+    connect.commit()
+
+    auto = [x[0] for x in cursor.execute(
+        f"SELECT id FROM login_id WHERE auto_time = {1}")]
+
+    while auto:
+        i = 0
+        await asyncio.sleep(20)
+        for _ in auto:
+            if datetime.now().strftime("%H:%M") == '21:04':
+                await bot.send_message(auto[i], TimeList(auto[i]))
+                await asyncio.sleep(60)
+            i += 1
+
+
+async def on_startup(_):
+    asyncio.create_task(AutoTime())
+
+
 @dp.message_handler(commands=['on'])
 async def process_autotime_on(message: types.Message):
     connect = sqlite3.connect('users.db')
@@ -282,12 +303,6 @@ async def process_autotime_on(message: types.Message):
         for auto_num in cursor.execute(
                 f"SELECT auto_time FROM login_id WHERE id = {message.chat.id}"):
             auto += str(auto_num)[1]
-
-        while auto == '1':
-            await asyncio.sleep(20)
-            if datetime.now().strftime("%H:%M") == '21:00':
-                await message.answer(TimeList(message.chat.id))
-                await asyncio.sleep(60)
 
 
 @dp.message_handler(commands=['off'])
@@ -330,6 +345,8 @@ async def process_start_command(message: types.Message):
 
 @dp.message_handler()
 async def echo(message: types.Message):
+    await AutoTime()
+
     connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
 
@@ -749,5 +766,6 @@ async def echo(message: types.Message):
         await message.answer(TimeList(people_id),
                              reply_markup=button_restart)
 
+
 if __name__ == '__main__':
-    executor.start_polling(dp)
+    executor.start_polling(dp, on_startup=on_startup)
