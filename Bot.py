@@ -336,7 +336,8 @@ async def process_help_command(message: types.Message):
 
 @dp.message_handler(commands=['info'])
 async def process_info_command(message: types.Message):
-    await message.answer('Версия 1.2\n\nДобавил авто-расписание в 21:00',
+    await message.answer('Версия 1.7\n\nДобавил авто-расписание в 21:00,'
+                         ' улучшил работу',
                          reply_markup=button_restart)
 
 
