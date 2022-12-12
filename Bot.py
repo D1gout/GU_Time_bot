@@ -268,6 +268,9 @@ async def AutoTime():   # Авто расписание
 
     check = 1
     while auto:
+        auto = [x[0] for x in cursor.execute(
+            f"SELECT id FROM login_id WHERE auto_time = {1}")]
+
         if datetime.now().strftime("%H:%M") == '09:00':
             check = 1
 
