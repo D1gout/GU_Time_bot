@@ -257,7 +257,7 @@ markup5 = ReplyKeyboardMarkup(one_time_keyboard=True).row(
 )
 
 
-async def AutoTime():
+async def AutoTime():   # Авто расписание
     connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
 
