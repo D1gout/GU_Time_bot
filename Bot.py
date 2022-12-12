@@ -10,7 +10,7 @@ import requests
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
-from config import TOKEN, MY_ID, DB_FILENAME
+from config import TOKEN, MY_ID
 
 
 def TimeList(index):
@@ -266,14 +266,18 @@ async def AutoTime():
     auto = [x[0] for x in cursor.execute(
         f"SELECT id FROM login_id WHERE auto_time = {1}")]
 
+    check = 1
     while auto:
+        if datetime.now().strftime("%H:%M") == '09:00':
+            check = 1
+
         i = 0
         await asyncio.sleep(20)
-        for _ in auto:
-            if datetime.now().strftime("%H:%M") == '21:04':
+        if datetime.now().strftime("%H:%M") == '21:00' and check == 1:
+            for _ in auto:
                 await bot.send_message(auto[i], TimeList(auto[i]))
-                await asyncio.sleep(60)
-            i += 1
+                check = 0
+                i += 1
 
 
 async def on_startup(_):
