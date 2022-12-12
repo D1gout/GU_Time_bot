@@ -345,8 +345,6 @@ async def process_start_command(message: types.Message):
 
 @dp.message_handler()
 async def echo(message: types.Message):
-    await AutoTime()
-
     connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
 
