@@ -291,7 +291,7 @@ async def AutoTime():  # Авто расписание
                 i += 1
 
 
-async def ListUpdate():
+async def ListUpdate():  # Авто обновление
     connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
 
