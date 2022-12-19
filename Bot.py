@@ -2,7 +2,6 @@ import asyncio
 import json
 import logging
 import sqlite3
-import threading
 from datetime import datetime
 
 import pendulum
@@ -257,9 +256,18 @@ markup5 = ReplyKeyboardMarkup(one_time_keyboard=True).row(
 )
 
 
-async def AutoTime():   # Авто расписание
+async def AutoTime():  # Авто расписание
     connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
+
+    cursor.execute("""CREATE TABLE IF NOT EXISTS login_id(
+            id INTEGER,
+            speciality_id STRING NOT NULL DEFAULT '0',
+            course_id STRING NOT NULL DEFAULT '0',
+            group_id STRING NOT NULL DEFAULT '0',
+            auto_time STRING NOT NULL DEFAULT '0',
+            list_text TEXT NOT NULL DEFAULT 'None'
+        )""")
 
     connect.commit()
 
@@ -283,8 +291,59 @@ async def AutoTime():   # Авто расписание
                 i += 1
 
 
+async def ListUpdate():
+    connect = sqlite3.connect('users.db')
+    cursor = connect.cursor()
+
+    cursor.execute("""CREATE TABLE IF NOT EXISTS login_id(
+            id INTEGER,
+            speciality_id STRING NOT NULL DEFAULT '0',
+            course_id STRING NOT NULL DEFAULT '0',
+            group_id STRING NOT NULL DEFAULT '0',
+            auto_time STRING NOT NULL DEFAULT '0',
+            list_text TEXT NOT NULL DEFAULT 'None'
+        )""")
+
+    connect.commit()
+
+    index = [x[0] for x in cursor.execute(
+        f"SELECT id FROM login_id WHERE group_id != {0}")]
+
+    while index:
+        index = [x[0] for x in cursor.execute(
+            f"SELECT id FROM login_id WHERE group_id != {0}")]
+
+        i = 0
+        for _ in index:
+            now_text = TimeList(index[i])
+
+            old_text = [x[0] for x in cursor.execute(
+                f"SELECT list_text FROM login_id WHERE id = {index[i]}")]
+
+            if old_text[0] == "None":
+                data = (now_text, index[i])
+
+                cursor.execute(
+                    f"UPDATE login_id SET list_text = ? WHERE id = ?", data)
+                connect.commit()
+
+                old_text[0] = now_text
+
+            if now_text != old_text[0]:
+                data = (now_text, index[i])
+
+                cursor.execute(
+                    f"UPDATE login_id SET list_text = ? WHERE id = ?", data)
+                connect.commit()
+
+                await bot.send_message(index[i], now_text)
+            i += 1
+        await asyncio.sleep(120)
+
+
 async def on_startup(_):
     asyncio.create_task(AutoTime())
+    asyncio.create_task(ListUpdate())
 
 
 @dp.message_handler(commands=['on'])
@@ -361,7 +420,8 @@ async def echo(message: types.Message):
             speciality_id STRING NOT NULL DEFAULT '0',
             course_id STRING NOT NULL DEFAULT '0',
             group_id STRING NOT NULL DEFAULT '0',
-            auto_time STRING NOT NULL DEFAULT '0'
+            auto_time STRING NOT NULL DEFAULT '0',
+            list_text TEXT NOT NULL DEFAULT 'None'
         )""")
 
     connect.commit()
@@ -372,7 +432,7 @@ async def echo(message: types.Message):
 
     if data is None:
         cursor.execute(
-            f"INSERT INTO login_id VALUES({people_id}, 0, 0, 0, 0);")
+            f"INSERT INTO login_id VALUES({people_id}, 0, 0, 0, 0, 'None');")
         connect.commit()
 
     speciality = ''
