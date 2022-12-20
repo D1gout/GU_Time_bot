@@ -10,6 +10,7 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 from config import TOKEN, MY_ID
+from weekday import WEEKDAYS
 
 
 def TimeList(index):
@@ -31,11 +32,11 @@ def TimeList(index):
             f"SELECT group_id FROM login_id WHERE id = {index}"):
         error += str(group_error)[1]
 
-    text = ''
+    text = WEEKDAYS[datetime.today().weekday()]
 
     if error == '0':
         text = "Пожалуйста пересоздайте аккаунт\n\n" \
-               "P.S. скорее всего я что-то обновил)"
+               "P.S. скорее всего я что-то обновил и ваш аккаунт потерялся("
         return text
 
     col = {'form': '1',
@@ -46,6 +47,7 @@ def TimeList(index):
     req = requests.post(__URL, data=col).text
 
     list = json.loads(req)
+    text_old = text
     list_speed = list["current"]["data"]
     day = pendulum.today().format('DD.MM.YYYY')
     nextDay = pendulum.tomorrow().format('DD.MM.YYYY')
@@ -110,12 +112,18 @@ def TimeList(index):
                                 text += list_speed[i]["discipline"] + "\n" + \
                                         list_speed[i]["time"] + "\n" + "\n\n"
 
+    text_new = text
+
+    if text_old == text_new:
+        text = WEEKDAYS[datetime.today().weekday()]
+        text += "Расписание отсутствует\n\n"
+
     text += "Завтра:\n\n"
 
-    list_speed = list["next"]["data"]
+    text_old = text
 
-    if weekday != "7":
-        list_speed = list["current"]["data"]
+    if weekday == "7":
+        list_speed = list["next"]["data"]
 
     for i in range(len(list_speed)):
         if list_speed[i]["discipline"] != "" or list_speed[i][
@@ -177,6 +185,20 @@ def TimeList(index):
                                 text += list_speed[i]["discipline"] + "\n" + \
                                         list_speed[i]["time"] + "\n" + "\n\n"
 
+    text_new = text
+    if text_old == text_new and text_new != "Расписание отсутствует\n\n" \
+                                            "Завтра:\n\n":
+        text += "Расписание отсутствует"
+
+    if text_new == "Расписание отсутствует\n\nЗавтра:\n\n":
+        text = "Расписание отсутствует"
+
+    data = (text, index)
+
+    cursor.execute(
+        f"UPDATE login_id SET list_text = ? WHERE id = ?", data)
+    connect.commit()
+
     return text
 
 
@@ -211,13 +233,23 @@ help_comands = ReplyKeyboardMarkup(resize_keyboard=True).row(
     qurs, start, route, restart, info
 )
 
+typ1 = KeyboardButton('Бакалавриат')
+typ2 = KeyboardButton('Магистратура')
+
+typ_buttons = ReplyKeyboardMarkup(resize_keyboard=True,
+                                  one_time_keyboard=True).row(
+    typ1, typ2
+)
+
 button1 = KeyboardButton('1️⃣')
 button2 = KeyboardButton('2️⃣')
 button3 = KeyboardButton('3️⃣')
 button4 = KeyboardButton('4️⃣')
 
 nup1 = KeyboardButton('Юриспруденция')
+nup1_2 = KeyboardButton('Юриспруденция\n(М)')  # (Магистратура)
 nup2 = KeyboardButton('Экономика')
+nup2_2 = KeyboardButton('Экономика\n(М)')  # (Магистратура)
 nup3 = KeyboardButton('Менеджмент')
 nup4 = KeyboardButton('Прикладная информатика')
 nup6 = KeyboardButton('Реклама и связи с общественностью')
@@ -227,6 +259,7 @@ nup9 = KeyboardButton("Управление персоналом")
 nup10 = KeyboardButton('Журналистика')
 nup11 = KeyboardButton('Гостиничное дело')
 nup12 = KeyboardButton('Психология')
+nup12_2 = KeyboardButton('Психология\n(М)')  # (Магистратура)
 nup13 = KeyboardButton('Туризм')
 
 gr1 = KeyboardButton('ФиК 3')
@@ -242,17 +275,25 @@ markup1 = ReplyKeyboardMarkup(resize_keyboard=True,
                               one_time_keyboard=True).row(
     button1, button2, button3, button4
 )
-markup2 = ReplyKeyboardMarkup(one_time_keyboard=True).row(
+markup2 = ReplyKeyboardMarkup(resize_keyboard=True,
+                              one_time_keyboard=True).row(
     nup1, nup2, nup3, nup4, skip1
 )
-markup3 = ReplyKeyboardMarkup(one_time_keyboard=True).row(
+markup3 = ReplyKeyboardMarkup(resize_keyboard=True,
+                              one_time_keyboard=True).row(
     nup6, nup7, nup8, nup9, skip2
 )
-markup4 = ReplyKeyboardMarkup(one_time_keyboard=True).row(
+markup4 = ReplyKeyboardMarkup(resize_keyboard=True,
+                              one_time_keyboard=True).row(
     nup10, nup11, nup12, nup13
 )
-markup5 = ReplyKeyboardMarkup(one_time_keyboard=True).row(
+markup5 = ReplyKeyboardMarkup(resize_keyboard=True,
+                              one_time_keyboard=True).row(
     button1, button2, gr1, gr2, gr3, gr4
+)
+markup6 = ReplyKeyboardMarkup(resize_keyboard=True,
+                              one_time_keyboard=True).row(
+    nup1_2, nup2_2, nup12_2
 )
 
 
@@ -315,28 +356,17 @@ async def ListUpdate():  # Авто обновление
 
         i = 0
         for _ in index:
-            now_text = TimeList(index[i])
-
             old_text = [x[0] for x in cursor.execute(
                 f"SELECT list_text FROM login_id WHERE id = {index[i]}")]
 
-            if old_text[0] == "None":
-                data = (now_text, index[i])
+            TimeList(index[i])
 
-                cursor.execute(
-                    f"UPDATE login_id SET list_text = ? WHERE id = ?", data)
-                connect.commit()
+            now_text = [x[0] for x in cursor.execute(
+                f"SELECT list_text FROM login_id WHERE id = {index[i]}")]
 
-                old_text[0] = now_text
+            if now_text[0] != old_text[0]:
+                await bot.send_message(index[i], now_text[0])
 
-            if now_text != old_text[0]:
-                data = (now_text, index[i])
-
-                cursor.execute(
-                    f"UPDATE login_id SET list_text = ? WHERE id = ?", data)
-                connect.commit()
-
-                await bot.send_message(index[i], now_text)
             i += 1
         await asyncio.sleep(120)
 
@@ -398,8 +428,9 @@ async def process_help_command(message: types.Message):
 
 @dp.message_handler(commands=['info'])
 async def process_info_command(message: types.Message):
-    await message.answer('Версия 1.7\n\nДобавил авто-расписание в 21:00,'
-                         ' улучшил работу',
+    await message.answer('Версия 1.8.2\n\nДобавил Магистратуру\n\n'
+                         'Добавил день недели в начале\n\n'
+                         'Добавил корректный вывод пустого расписания',
                          reply_markup=button_restart)
 
 
@@ -407,7 +438,7 @@ async def process_info_command(message: types.Message):
 async def process_start_command(message: types.Message):
     await message.answer(
         "Привет, я бот который скидывает расписание\n\nby @Aweyout",
-        reply_markup=button_route)
+        reply_markup=typ_buttons)
 
 
 @dp.message_handler()
@@ -518,6 +549,18 @@ async def echo(message: types.Message):
             connect.commit()
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
+        if speciality == '14':
+            cursor.execute(
+                f"UPDATE login_id SET group_id = 796 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id),
+                                 reply_markup=button_restart)
+        if speciality == '15':
+            cursor.execute(
+                f"UPDATE login_id SET group_id = 815 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id),
+                                 reply_markup=button_restart)
 
     if message.text == '2️⃣':
         if speciality == '1':
@@ -589,6 +632,12 @@ async def echo(message: types.Message):
         if speciality == '13':
             cursor.execute(
                 f"UPDATE login_id SET group_id = 824 WHERE id = {people_id};")
+            connect.commit()
+            await message.answer(TimeList(people_id),
+                                 reply_markup=button_restart)
+        if speciality == '15':
+            cursor.execute(
+                f"UPDATE login_id SET group_id = 842 WHERE id = {people_id};")
             connect.commit()
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
@@ -735,8 +784,11 @@ async def echo(message: types.Message):
     if message.text == 'Курс':
         await message.answer('Ваш курс', reply_markup=markup1)
 
-    if message.text == 'Направление':
+    if message.text == typ1.text:
         await message.answer('Ваше направление', reply_markup=markup2)
+
+    if message.text == typ2.text:
+        await message.answer('Ваше направление', reply_markup=markup6)
 
     if message.text == '2 стр':
         await message.answer('.', reply_markup=markup3)
@@ -801,6 +853,21 @@ async def echo(message: types.Message):
     if message.text == nup13.text:
         cursor.execute(
             f"UPDATE login_id SET speciality_id = 13 WHERE id = {people_id};")
+        connect.commit()
+        await message.answer('Ваш курс', reply_markup=markup1)
+    if message.text == nup1_2.text:
+        cursor.execute(
+            f"UPDATE login_id SET speciality_id = 14 WHERE id = {people_id};")
+        connect.commit()
+        await message.answer('Ваш курс', reply_markup=markup1)
+    if message.text == nup2_2.text:
+        cursor.execute(
+            f"UPDATE login_id SET speciality_id = 15 WHERE id = {people_id};")
+        connect.commit()
+        await message.answer('Ваш курс', reply_markup=markup1)
+    if message.text == nup12_2.text:
+        cursor.execute(
+            f"UPDATE login_id SET speciality_id = 16 WHERE id = {people_id};")
         connect.commit()
         await message.answer('Ваш курс', reply_markup=markup1)
 
