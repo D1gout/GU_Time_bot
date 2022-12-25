@@ -4,6 +4,7 @@ import logging
 import sqlite3
 from datetime import datetime
 
+import aiogram.utils.exceptions
 import pendulum
 import requests
 from aiogram import Bot, Dispatcher, executor, types
@@ -488,7 +489,11 @@ async def ListUpdate():  # Авто обновление
                 f"SELECT list_text FROM login_id WHERE id = {index[i]}")]
 
             if now_text[0] != old_text[0]:
-                await bot.send_message(index[i], now_text[0])
+                try:
+                    await bot.send_message(index[i], now_text[0])
+                except aiogram.utils.exceptions.BotBlocked:
+                    print(f'{index[i]} закрыл сообщения')
+
 
             i += 1
         await asyncio.sleep(120)
