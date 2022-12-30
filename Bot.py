@@ -489,11 +489,7 @@ async def ListUpdate():  # Авто обновление
                 f"SELECT list_text FROM login_id WHERE id = {index[i]}")]
 
             if now_text[0] != old_text[0]:
-                try:
-                    await bot.send_message(index[i], now_text[0])
-                except aiogram.utils.exceptions.BotBlocked:
-                    print(f'{index[i]} закрыл сообщения')
-
+                await bot.send_message(index[i], now_text[0])
 
             i += 1
         await asyncio.sleep(120)
@@ -557,7 +553,9 @@ async def process_help_command(message: types.Message):
 
 @dp.message_handler(commands=['info'])
 async def process_info_command(message: types.Message):
-    await message.answer('Версия 1.8.2\n\nДобавил Магистратуру\n\n'
+    await message.answer('Версия 1.8.5\n\n'
+                         'Добавил расписание на всю неделю\n\n'
+                         'Добавил Магистратуру\n\n'
                          'Добавил день недели в начале\n\n'
                          'Добавил корректный вывод пустого расписания',
                          reply_markup=button_restart)
