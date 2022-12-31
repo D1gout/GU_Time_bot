@@ -4,10 +4,10 @@ import logging
 import sqlite3
 from datetime import datetime
 
-import aiogram.utils.exceptions
 import pendulum
 import requests
 from aiogram import Bot, Dispatcher, executor, types
+from aiogram.utils.exceptions import BotBlocked
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 from config import TOKEN
@@ -451,7 +451,10 @@ async def AutoTime():  # Авто расписание
         await asyncio.sleep(20)
         if datetime.now().strftime("%H:%M") == '21:00' and check == 1:
             for _ in auto:
-                await bot.send_message(auto[i], TimeList(auto[i]))
+                try:
+                    await bot.send_message(auto[i], TimeList(auto[i]))
+                except BotBlocked:
+                    await asyncio.sleep(0.1)
                 check = 0
                 i += 1
 
@@ -489,7 +492,10 @@ async def ListUpdate():  # Авто обновление
                 f"SELECT list_text FROM login_id WHERE id = {index[i]}")]
 
             if now_text[0] != old_text[0]:
-                await bot.send_message(index[i], now_text[0])
+                try:
+                    await bot.send_message(index[i], now_text[0])
+                except BotBlocked:
+                    await asyncio.sleep(0.1)
 
             i += 1
         await asyncio.sleep(120)
