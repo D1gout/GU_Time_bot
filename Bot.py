@@ -553,7 +553,7 @@ async def process_help_command(message: types.Message):
 
 @dp.message_handler(commands=['info'])
 async def process_info_command(message: types.Message):
-    await message.answer('Версия 1.8.5\n\n'
+    await message.answer('Версия 1.8.6\n\n'
                          'Добавил расписание на всю неделю\n\n'
                          'Добавил Магистратуру\n\n'
                          'Добавил день недели в начале\n\n'
