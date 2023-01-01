@@ -8,7 +8,8 @@ import pendulum
 import requests
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.utils.exceptions import BotBlocked, ChatNotFound
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, \
+    InlineKeyboardButton, InlineKeyboardMarkup
 
 from config import TOKEN
 from weekday import WEEKDAYS
@@ -343,7 +344,8 @@ info = KeyboardButton('/info')
 button_info = ReplyKeyboardMarkup(resize_keyboard=True).add(qurs)
 
 start = KeyboardButton('/start')
-button_start = ReplyKeyboardMarkup(resize_keyboard=True).add(start)
+button_start = ReplyKeyboardMarkup(resize_keyboard=True,
+                                   one_time_keyboard=True).add(start)
 
 on = KeyboardButton('/on')
 off = KeyboardButton('/off')
@@ -357,11 +359,14 @@ help_comands = ReplyKeyboardMarkup(resize_keyboard=True).row(
     qurs, start, route, restart, info
 )
 
-typ1 = KeyboardButton('Бакалавриат')
-typ2 = KeyboardButton('Магистратура')
+typ1 = InlineKeyboardButton('Бакалавриат', callback_data='typ1_click')
+typ2 = InlineKeyboardButton('Магистратура', callback_data='typ2_click')
 
-typ_buttons = ReplyKeyboardMarkup(resize_keyboard=True,
-                                  one_time_keyboard=True).row(
+link_button = InlineKeyboardMarkup().add(InlineKeyboardButton(
+                    'Написать мне',
+                    url='https://t.me/Aweyout'))
+
+typ_buttons = InlineKeyboardMarkup().row(
     typ1, typ2
 )
 
@@ -506,6 +511,20 @@ async def on_startup(_):
     asyncio.create_task(ListUpdate())
 
 
+@dp.callback_query_handler(lambda c: c.data == 'typ1_click')
+async def process_callback_button1(callback_query: types.CallbackQuery):
+    await bot.answer_callback_query(callback_query.id)
+    await bot.send_message(callback_query.from_user.id, 'Ваше направление',
+                           reply_markup=markup2)
+
+
+@dp.callback_query_handler(lambda c: c.data == 'typ2_click')
+async def process_callback_button1(callback_query: types.CallbackQuery):
+    await bot.answer_callback_query(callback_query.id)
+    await bot.send_message(callback_query.from_user.id, 'Ваше направление',
+                           reply_markup=markup6)
+
+
 @dp.message_handler(commands=['on'])
 async def process_autotime_on(message: types.Message):
     connect = sqlite3.connect('users.db')
@@ -559,18 +578,18 @@ async def process_help_command(message: types.Message):
 
 @dp.message_handler(commands=['info'])
 async def process_info_command(message: types.Message):
-    await message.answer('Версия 1.8.6\n\n'
-                         'Добавил расписание на всю неделю\n\n'
-                         'Добавил Магистратуру\n\n'
-                         'Добавил день недели в начале\n\n'
-                         'Добавил корректный вывод пустого расписания',
+    await message.answer('Версия 1.9.0\n\n'
+                         'Новые кнопки, скоро глобальное обновление',
                          reply_markup=button_restart)
 
 
 @dp.message_handler(commands=['start'])
 async def process_start_command(message: types.Message):
     await message.answer(
-        "Привет, я бот который скидывает расписание\n\nby @Aweyout",
+        "Привет!",
+        reply_markup=link_button)
+    await message.answer(
+        "Я бот который скидывает расписание\n\nВыбери уровень обучения",
         reply_markup=typ_buttons)
 
 
@@ -917,16 +936,16 @@ async def echo(message: types.Message):
         #     (TimeList(people_id), reply_markup=button_restart)
 
     if message.text == 'Обновить':
-        await message.answer(TimeList(people_id), reply_markup=button_restart)
+        if TimeList(people_id) == "Пожалуйста пересоздайте аккаунт\n\n" \
+                "P.S. скорее всего я что-то обновил и ваш аккаунт потерялся(":
+            await message.answer(TimeList(people_id),
+                                 reply_markup=button_start)
+        else:
+            await message.answer(TimeList(people_id),
+                                 reply_markup=button_restart)
 
     if message.text == 'Курс':
         await message.answer('Ваш курс', reply_markup=markup1)
-
-    if message.text == typ1.text:
-        await message.answer('Ваше направление', reply_markup=markup2)
-
-    if message.text == typ2.text:
-        await message.answer('Ваше направление', reply_markup=markup6)
 
     if message.text == '2 стр':
         await message.answer('.', reply_markup=markup3)
