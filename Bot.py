@@ -474,26 +474,26 @@ async def ListUpdate():  # Авто обновление
 
     connect.commit()
 
-    index = [x[0] for x in cursor.execute(
+    index_count = [x[0] for x in cursor.execute(
         f"SELECT id FROM login_id WHERE group_id != {0}")]
 
-    while index:
-        index = cursor.execute(
+    while index_count:
+        index_count = cursor.execute(
             f"SELECT id FROM login_id WHERE group_id != {0}").fetchall()
 
         i = 0
-        for k in index:
+        for index in index_count:
             old_text = [x[0] for x in cursor.execute(
-                f"SELECT list_text FROM login_id WHERE id = {k[0]}")]
+                f"SELECT list_text FROM login_id WHERE id = {index[0]}")]
 
-            TimeList(k[0])
+            TimeList(index[0])
 
             now_text = [x[0] for x in cursor.execute(
-                f"SELECT list_text FROM login_id WHERE id = {k[0]}")]
+                f"SELECT list_text FROM login_id WHERE id = {index[0]}")]
 
             if now_text[0] != old_text[0]:
                 try:
-                    await bot.send_message(k[0], now_text[0])
+                    await bot.send_message(index[0], now_text[0])
                 except BotBlocked and ChatNotFound:
                     await asyncio.sleep(0.1)
 
