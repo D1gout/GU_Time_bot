@@ -498,7 +498,7 @@ async def ListUpdate():  # Авто обновление расписания
                     await asyncio.sleep(0.1)
 
             i += 1
-        await asyncio.sleep(5)
+        await asyncio.sleep(240)
 
 
 async def on_startup(_):
