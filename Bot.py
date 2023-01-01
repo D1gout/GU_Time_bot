@@ -7,7 +7,7 @@ from datetime import datetime
 import pendulum
 import requests
 from aiogram import Bot, Dispatcher, executor, types
-from aiogram.utils.exceptions import BotBlocked
+from aiogram.utils.exceptions import BotBlocked, ChatNotFound
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 from config import TOKEN
@@ -478,27 +478,27 @@ async def ListUpdate():  # Авто обновление
         f"SELECT id FROM login_id WHERE group_id != {0}")]
 
     while index:
-        index = [x[0] for x in cursor.execute(
-            f"SELECT id FROM login_id WHERE group_id != {0}")]
+        index = cursor.execute(
+            f"SELECT id FROM login_id WHERE group_id != {0}").fetchall()
 
         i = 0
-        for _ in index:
+        for k in index:
             old_text = [x[0] for x in cursor.execute(
-                f"SELECT list_text FROM login_id WHERE id = {index[i]}")]
+                f"SELECT list_text FROM login_id WHERE id = {k[0]}")]
 
-            TimeList(index[i])
+            TimeList(k[0])
 
             now_text = [x[0] for x in cursor.execute(
-                f"SELECT list_text FROM login_id WHERE id = {index[i]}")]
+                f"SELECT list_text FROM login_id WHERE id = {k[0]}")]
 
             if now_text[0] != old_text[0]:
                 try:
-                    await bot.send_message(index[i], now_text[0])
-                except BotBlocked:
+                    await bot.send_message(k[0], now_text[0])
+                except BotBlocked and ChatNotFound:
                     await asyncio.sleep(0.1)
 
             i += 1
-        await asyncio.sleep(120)
+        await asyncio.sleep(5)
 
 
 async def on_startup(_):
