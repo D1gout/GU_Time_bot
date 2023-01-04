@@ -362,8 +362,8 @@ typ1 = InlineKeyboardButton('Бакалавриат', callback_data='typ1_click'
 typ2 = InlineKeyboardButton('Магистратура', callback_data='typ2_click')
 
 link_button = InlineKeyboardMarkup().add(InlineKeyboardButton(
-                    'Написать мне',
-                    url='https://t.me/Aweyout'))
+    'Написать мне',
+    url='https://t.me/Aweyout'))
 
 typ_buttons = InlineKeyboardMarkup().row(
     typ1, typ2
@@ -479,11 +479,16 @@ async def ListUpdate():  # Авто обновление расписания
     index_count = [x[0] for x in cursor.execute(
         f"SELECT id FROM login_id WHERE group_id != {0}")]
 
+    while not index_count:
+        await asyncio.sleep(10)
+
+        index_count = [x[0] for x in cursor.execute(
+            f"SELECT id FROM login_id WHERE group_id != {0}")]
+
     while index_count:
         index_count = cursor.execute(
             f"SELECT id FROM login_id WHERE group_id != {0}").fetchall()
 
-        i = 0
         for index in index_count:
             old_text = [x[0] for x in cursor.execute(
                 f"SELECT list_text FROM login_id WHERE id = {index[0]}")]
@@ -496,8 +501,9 @@ async def ListUpdate():  # Авто обновление расписания
             if now_text[0] != old_text[0]:
                 await bot.send_message(index[0], now_text[0])
 
-            i += 1
-        await asyncio.sleep(240)
+            await asyncio.sleep(0.1)
+
+        await asyncio.sleep(10)
 
 
 async def on_startup(_):
@@ -931,7 +937,7 @@ async def echo(message: types.Message):
 
     if message.text == 'Обновить':
         if TimeList(people_id) == "Пожалуйста пересоздайте аккаунт\n\n" \
-                "P.S. скорее всего я что-то обновил и ваш аккаунт потерялся(":
+                                  "P.S. скорее всего я что-то обновил и ваш аккаунт потерялся(":
             await message.answer(TimeList(people_id),
                                  reply_markup=button_start)
         else:
