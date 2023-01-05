@@ -443,6 +443,12 @@ async def AutoTime():  # Авто расписание
     auto = [x[0] for x in cursor.execute(
         f"SELECT id FROM login_id WHERE auto_time = {1}")]
 
+    while not auto:
+        await asyncio.sleep(10)
+
+        auto = [x[0] for x in cursor.execute(
+            f"SELECT id FROM login_id WHERE auto_time = {1}")]
+
     check = 1
     while auto:
         auto = [x[0] for x in cursor.execute(
