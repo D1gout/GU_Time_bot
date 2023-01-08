@@ -7,6 +7,7 @@ from datetime import datetime
 import pendulum
 import requests
 from aiogram import Bot, Dispatcher, executor, types
+from aiogram.utils.exceptions import BotBlocked
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, \
     InlineKeyboardButton, InlineKeyboardMarkup
 
@@ -509,7 +510,7 @@ async def ListUpdate():  # Авто обновление расписания
 
             await asyncio.sleep(0.1)
 
-        await asyncio.sleep(10)
+        await asyncio.sleep(3600)
 
 
 async def on_startup(_):
@@ -520,15 +521,21 @@ async def on_startup(_):
 @dp.callback_query_handler(lambda c: c.data == 'typ1_click')
 async def process_callback_button1(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id)
-    await bot.send_message(callback_query.from_user.id, 'Ваше направление',
-                           reply_markup=markup2)
+    try:
+        await bot.send_message(callback_query.from_user.id, 'Ваше направление',
+                               reply_markup=markup2)
+    except BotBlocked:
+        await asyncio.sleep(0.1)
 
 
 @dp.callback_query_handler(lambda c: c.data == 'typ2_click')
 async def process_callback_button1(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id)
-    await bot.send_message(callback_query.from_user.id, 'Ваше направление',
-                           reply_markup=markup6)
+    try:
+        await bot.send_message(callback_query.from_user.id, 'Ваше направление',
+                               reply_markup=markup6)
+    except BotBlocked:
+        await asyncio.sleep(0.1)
 
 
 @dp.message_handler(commands=['on'])
@@ -943,7 +950,8 @@ async def echo(message: types.Message):
 
     if message.text == 'Обновить':
         if TimeList(people_id) == "Пожалуйста пересоздайте аккаунт\n\n" \
-                                  "P.S. скорее всего я что-то обновил и ваш аккаунт потерялся(":
+                                  "P.S. скорее всего я что-то " \
+                                  "обновил и ваш аккаунт потерялся(":
             await message.answer(TimeList(people_id),
                                  reply_markup=button_start)
         else:
