@@ -500,7 +500,10 @@ async def ListUpdate():  # Авто обновление расписания
             old_text = [x[0] for x in cursor.execute(
                 f"SELECT list_text FROM login_id WHERE id = {index[0]}")]
 
-            TimeList(index[0])
+            try:
+                TimeList(index[0])
+            except BotBlocked:
+                asyncio.sleep(0.1)
 
             now_text = [x[0] for x in cursor.execute(
                 f"SELECT list_text FROM login_id WHERE id = {index[0]}")]
