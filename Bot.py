@@ -462,7 +462,10 @@ async def AutoTime():  # Авто расписание
         await asyncio.sleep(20)
         if datetime.now().strftime("%H:%M") == '21:00' and check == 1:
             for _ in auto:
-                await bot.send_message(auto[i], TimeList(auto[i]))
+                try:
+                    await bot.send_message(auto[i], TimeList(auto[i]))
+                except BotBlocked:
+                    await asyncio.sleep(0.1)
 
                 check = 0
                 i += 1
@@ -503,13 +506,16 @@ async def ListUpdate():  # Авто обновление расписания
             try:
                 TimeList(index[0])
             except BotBlocked:
-                asyncio.sleep(0.1)
+                await asyncio.sleep(0.1)
 
             now_text = [x[0] for x in cursor.execute(
                 f"SELECT list_text FROM login_id WHERE id = {index[0]}")]
 
             if now_text[0] != old_text[0]:
-                await bot.send_message(index[0], now_text[0])
+                try:
+                    await bot.send_message(index[0], now_text[0])
+                except BotBlocked:
+                    await asyncio.sleep(0.1)
 
             await asyncio.sleep(0.1)
 
