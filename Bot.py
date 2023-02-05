@@ -220,6 +220,8 @@ async def FullList(index):
     group = ''
     error = ''
 
+    weekday = str(datetime.today().isoweekday())
+
     for group_num in cursor.execute(
             f"SELECT group_id FROM login_id WHERE id = {index}"):
         group += str(group_num)[1:4]
@@ -234,18 +236,21 @@ async def FullList(index):
            'action': 'lau_shedule_students_show'
            }
     req = requests.post(__URL, data=col).text
+    list = json.loads(req)
 
     await bot.send_message(index, 'Расписание на неделю')
 
     check = 0
 
+    list_speed = list["current"]["data"]
+
+    if weekday == "7":
+        list_speed = list["next"]["data"]
+
     for j in range(1, 8):
         text = WEEKDAYS[j - 1]
 
-        list = json.loads(req)
-
         text_old = text
-        list_speed = list["current"]["data"]
         for i in range(len(list_speed)):
             if list_speed[i]["discipline"] != "" or \
                     list_speed[i]["discipline"] is not None:
