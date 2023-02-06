@@ -4,8 +4,7 @@ This bot sends the schedule in a telegram
 Python (3.10 or later)
 ### Python packages 
 [requirements.txt](https://github.com/D1gout/TGBot/blob/main/requirements.txt)
-
-##Start
+## Start
 1. Clone this repository
 
 
