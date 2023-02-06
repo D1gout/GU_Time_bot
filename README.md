@@ -6,6 +6,8 @@ Python (3.10 or later)
 [requirements.txt](https://github.com/D1gout/TGBot/blob/main/requirements.txt)
 ## Start
 1. Clone this repository
+  `$ git clone https://github.com/github.com/D1gout/TGBot.git`
+2. Run your project
 
 
 
