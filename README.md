@@ -9,7 +9,7 @@ Python (3.10 or later)
 - `$ git clone https://github.com/github.com/D1gout/TGBot.git`
 2. Install packages
 - `$ pip install -r requirements.txt`
-### Or
+#### or
 - `$ pip3 install -r requirements.txt`
 3. Run project
 - `$ python Bot.py`
