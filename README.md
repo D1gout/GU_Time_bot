@@ -5,9 +5,10 @@ Python (3.10 or later)
 ### Python packages 
 [requirements.txt](https://github.com/D1gout/TGBot/blob/main/requirements.txt)
 ## Start
-1. Clone this repository
+1. Clone repository
 - `$ git clone https://github.com/github.com/D1gout/TGBot.git`
-3. Run your project
+2. Install packages
+- `pip install -r requirements.txt`
 
 
 
