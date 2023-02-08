@@ -1,4 +1,4 @@
-![Header](https://github.com/D1gout/TGBot/F0FF9753-C07B-45AF-B628-71EA4390956B.png)
+![Header](https://github.com/D1gout/TGBot/icon.png)
 
 # Telegram Bot
 This bot sends the schedule in a telegram
