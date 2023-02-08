@@ -8,7 +8,7 @@ Python (3.10 or later)
 1. Clone repository
 - `$ git clone https://github.com/github.com/D1gout/TGBot.git`
 2. Install packages
-- `pip install -r requirements.txt`
+- `$ pip install -r requirements.txt`
 
 
 
