@@ -15,8 +15,5 @@ Python (3.10 or later)
 <br>`TOKEN = 'YOUR_TOKEN_HERE'`
 6. Run project
 <br>`$ python Bot.py`
-
-
-
-
+## Testing
 [![Python application](https://github.com/D1gout/TGBot/actions/workflows/python-app.yml/badge.svg)](https://github.com/D1gout/TGBot/actions/workflows/python-app.yml)
