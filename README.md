@@ -11,7 +11,9 @@ Python (3.10 or later)
 <br>`$ pip install -r requirements.txt`
 <br><strong>or</strong>
 <br>`$ pip3 install -r requirements.txt`
-3. Run project
+4. Create `config.py`
+<br>`TOKEN = 'YOUR_TOKEN_HERE'`
+6. Run project
 <br>`$ python Bot.py`
 
 
