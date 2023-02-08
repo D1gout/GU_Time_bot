@@ -6,13 +6,13 @@ Python (3.10 or later)
 [requirements.txt](https://github.com/D1gout/TGBot/blob/main/requirements.txt)
 ## Start
 1. Clone repository
-- `$ git clone https://github.com/github.com/D1gout/TGBot.git`
+<br>`$ git clone https://github.com/github.com/D1gout/TGBot.git`
 2. Install packages
 <br>`$ pip install -r requirements.txt`
 <br><strong>or</strong>
 <br>`$ pip3 install -r requirements.txt`
 3. Run project
-- `$ python Bot.py`
+<br>`$ python Bot.py`
 
 
 
