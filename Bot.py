@@ -47,8 +47,10 @@ def TimeList(index):
            'action': 'lau_shedule_students_show'
            }
     req = requests.post(__URL, data=col).text
-
-    list = json.loads(req)
+    try:
+        list = json.loads(req)
+    except:
+        list = req
     text_old = text
     list_speed = list["current"]["data"]
     day = pendulum.today().format('DD.MM.YYYY')
@@ -236,8 +238,10 @@ async def FullList(index):
            'action': 'lau_shedule_students_show'
            }
     req = requests.post(__URL, data=col).text
-    list = json.loads(req)
-
+    try:
+        list = json.loads(req)
+    except:
+        list = req
     await bot.send_message(index, 'Расписание на неделю')
 
     check = 0
