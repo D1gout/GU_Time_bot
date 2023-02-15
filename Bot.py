@@ -49,8 +49,9 @@ def TimeList(index):
     req = requests.post(__URL, data=col).text
     try:
         list = json.loads(req)
-    except:
-        list = req
+    except json.decoder.JSONDecodeError:
+        text = 'Ошибка получения расписания'
+        return text
     text_old = text
     list_speed = list["current"]["data"]
     day = pendulum.today().format('DD.MM.YYYY')
@@ -240,8 +241,9 @@ async def FullList(index):
     req = requests.post(__URL, data=col).text
     try:
         list = json.loads(req)
-    except:
-        list = req
+    except json.decoder.JSONDecodeError:
+        text = 'Ошибка получения расписания'
+        return text
     await bot.send_message(index, 'Расписание на неделю')
 
     check = 0
