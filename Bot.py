@@ -498,23 +498,23 @@ async def ListUpdate():  # Авто обновление расписания
     connect.commit()
 
     index_count = [x[0] for x in cursor.execute(
-        "SELECT id FROM login_id WHERE group_id != {0}".format(0))]
+        "SELECT id FROM login_id WHERE group_id != {}".format(0))]
 
     while not index_count:
         await asyncio.sleep(10)
 
         index_count = [x[0] for x in cursor.execute(
-            "SELECT id FROM login_id WHERE group_id != {0}".format(0))]
+            "SELECT id FROM login_id WHERE group_id != {}".format(0))]
 
     while index_count:
         index_count = cursor.execute(
-            "SELECT id FROM login_id WHERE group_id != {0}"
+            "SELECT id FROM login_id WHERE group_id != {}"
             .format(0)).fetchall()
 
         for index in index_count:
             old_text = [x[0] for x in cursor.execute(
-                "SELECT list_text FROM login_id WHERE id = {index[0]}"
-                .format(0))]
+                "SELECT list_text FROM login_id WHERE id = {}"
+                .format(index[0]))]
 
             try:
                 TimeList(index[0])
@@ -679,7 +679,8 @@ async def echo(message: types.Message):
     if message.text == '1️⃣':
         # if speciality == '1':
         #     cursor.execute
-        #     ("UPDATE login_id SET group_id = 0 WHERE id = {};".format(people_id))
+        #     ("UPDATE login_id SET group_id = 0 WHERE id = {};"
+        #     .format(people_id))
         #     connect.commit()
         #     await message.answer
         #     (TimeList(people_id), reply_markup=button_restart)
