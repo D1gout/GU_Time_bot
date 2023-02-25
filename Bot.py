@@ -1000,9 +1000,9 @@ async def echo(message: types.Message):
         await message.answer('Ваш курс', reply_markup=markup1)
 
     if message.text == '2 стр':
-        await message.answer('.', reply_markup=markup3)
+        await message.answer('2 стр', reply_markup=markup3)
     if message.text == '3 стр':
-        await message.answer('.', reply_markup=markup4)
+        await message.answer('3 стр', reply_markup=markup4)
 
     if message.text == nup1.text:
         cursor.execute(
