@@ -450,7 +450,7 @@ markup6 = ReplyKeyboardMarkup(resize_keyboard=True,
 )
 
 
-async def AutoTime():  # Авто расписание
+async def AutoTime():       # Авто расписание
     connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
 
@@ -495,7 +495,7 @@ async def AutoTime():  # Авто расписание
                 i += 1
 
 
-async def ListUpdate():  # Авто обновление расписания
+async def ListUpdate():     # Авто обновление расписания
     connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
 
@@ -530,7 +530,7 @@ async def ListUpdate():  # Авто обновление расписания
                 .format(index[0]))]
 
             try:
-                TimeList(index[0])
+                TimeListUpdate(index[0])
             except BotBlocked:
                 await asyncio.sleep(0.1)
 
@@ -549,7 +549,7 @@ async def ListUpdate():  # Авто обновление расписания
         await asyncio.sleep(240)
 
 
-async def ListTimeUpdater():
+async def ListTimeUpdater():    # Обновления расписания в БД раз в час
     connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
 
