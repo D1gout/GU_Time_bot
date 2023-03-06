@@ -21,8 +21,9 @@ def TimeList(index):
 
     connect.commit()
 
-    text = [x[0] for x in cursor.execute(
-        "SELECT list_text FROM login_id WHERE id = {}".format(index))]
+    text = cursor.execute(
+        "SELECT list_text FROM login_id WHERE id = {}"
+        .format(index)).fetchone()
 
     return text
 
