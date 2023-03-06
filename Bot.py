@@ -25,7 +25,6 @@ def TimeList(index):
         "SELECT list_text FROM login_id WHERE id = {}"
         .format(index)).fetchone()
 
-    text = json.loads(text[0])
     return text[0]
 
 
