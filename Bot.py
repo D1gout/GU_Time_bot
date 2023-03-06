@@ -16,6 +16,18 @@ from weekday import WEEKDAYS
 
 
 def TimeList(index):
+    connect = sqlite3.connect('users.db')
+    cursor = connect.cursor()
+
+    connect.commit()
+
+    text = [x[0] for x in cursor.execute(
+        "SELECT list_text FROM login_id WHERE id = {}".format(index))]
+
+    return text
+
+
+def TimeListUpdate(index):
     __URL = 'https://gu-ural.ru/wp-admin/admin-ajax.php'
 
     connect = sqlite3.connect('users.db')
@@ -532,6 +544,40 @@ async def ListUpdate():  # Авто обновление расписания
                     await asyncio.sleep(0.1)
 
             await asyncio.sleep(0.1)
+
+        await asyncio.sleep(240)
+
+
+async def ListTimeUpdater():
+    connect = sqlite3.connect('users.db')
+    cursor = connect.cursor()
+
+    cursor.execute("""CREATE TABLE IF NOT EXISTS login_id(
+                id INTEGER,
+                speciality_id STRING NOT NULL DEFAULT '0',
+                course_id STRING NOT NULL DEFAULT '0',
+                group_id STRING NOT NULL DEFAULT '0',
+                auto_time STRING NOT NULL DEFAULT '0',
+                list_text TEXT NOT NULL DEFAULT 'None'
+            )""")
+
+    connect.commit()
+
+    index_count = [x[0] for x in cursor.execute(
+        "SELECT id FROM login_id WHERE group_id != {}".format(0))]
+
+    while not index_count:
+        await asyncio.sleep(10)
+
+        index_count = [x[0] for x in cursor.execute(
+            "SELECT id FROM login_id WHERE group_id != {}".format(0))]
+
+    while index_count:
+        for index in index_count:
+            try:
+                TimeListUpdate(index[0])
+            except:
+                await asyncio.sleep(0.1)
 
         await asyncio.sleep(240)
 
