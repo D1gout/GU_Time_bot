@@ -580,12 +580,13 @@ async def ListTimeUpdater():
             except:
                 await asyncio.sleep(0.1)
 
-        await asyncio.sleep(240)
+        await asyncio.sleep(3600)
 
 
 async def on_startup(_):
     asyncio.create_task(AutoTime())
     asyncio.create_task(ListUpdate())
+    asyncio.create_task(ListTimeUpdater())
 
 
 @dp.callback_query_handler(lambda c: c.data == 'typ1_click')
