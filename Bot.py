@@ -530,7 +530,7 @@ async def ListUpdate():     # Авто обновление расписания
                 .format(index[0]))]
 
             try:
-                TimeListUpdate(index[0])
+                TimeList(index[0])
             except BotBlocked:
                 await asyncio.sleep(0.1)
 
