@@ -25,7 +25,7 @@ def TimeList(index):
         try:
             TimeListUpdate(index)
         except:
-            asyncio.sleep(0.1)
+            await asyncio.sleep(0.1)
 
     text = cursor.execute(
         "SELECT list_text FROM login_id WHERE id = {}"
