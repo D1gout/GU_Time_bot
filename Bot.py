@@ -21,8 +21,11 @@ def TimeList(index):
 
     connect.commit()
 
-    if asyncio.sleep(3600):
-        TimeListUpdate(index)
+    if await asyncio.sleep(360):
+        try:
+            TimeListUpdate(index)
+        except:
+            asyncio.sleep(0.1)
 
     text = cursor.execute(
         "SELECT list_text FROM login_id WHERE id = {}"
