@@ -546,7 +546,7 @@ async def ListUpdate():     # Авто обновление расписания
         await asyncio.sleep(240)
 
 
-async def ListTimeUpdater():    # Обновления расписания в БД раз в час
+async def ListTimeUpdater():    # Обновление расписания в БД раз в час
     connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
 
@@ -563,12 +563,6 @@ async def ListTimeUpdater():    # Обновления расписания в �
 
     index_count = [x[0] for x in cursor.execute(
         "SELECT id FROM login_id WHERE group_id != {}".format(0))]
-
-    while not index_count:
-        await asyncio.sleep(10)
-
-        index_count = [x[0] for x in cursor.execute(
-            "SELECT id FROM login_id WHERE group_id != {}".format(0))]
 
     while index_count:
         for index in index_count:
