@@ -15,17 +15,15 @@ from config import TOKEN
 from weekday import WEEKDAYS
 
 
-def TimeList(index):
+async def TimeList(index):
     connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
 
     connect.commit()
 
-    if await asyncio.sleep(360):
-        try:
-            TimeListUpdate(index)
-        except:
-            await asyncio.sleep(0.1)
+    while True:
+        TimeListUpdate(index)
+        await asyncio.sleep(3600)
 
     text = cursor.execute(
         "SELECT list_text FROM login_id WHERE id = {}"
