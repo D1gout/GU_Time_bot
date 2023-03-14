@@ -528,7 +528,7 @@ async def ListUpdate():     # Авто обновление расписания
                 "SELECT list_text FROM login_id WHERE id = {}"
                 .format(index))]
 
-            TimeList(index)
+            TimeListUpdate(index)
 
             now_text = [x[0] for x in cursor.execute(
                 "SELECT list_text FROM login_id WHERE id = {}".
@@ -573,7 +573,7 @@ async def ListTimeUpdater():    # Обновление расписания в �
             except TimeoutError:
                 await asyncio.sleep(0.1)
 
-        await asyncio.sleep(60)
+        await asyncio.sleep(3600)
 
 
 async def on_startup(_):
