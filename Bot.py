@@ -528,17 +528,17 @@ async def ListUpdate():     # Авто обновление расписания
         for _ in index:
             old_text = [x[0] for x in cursor.execute(
                 "SELECT list_text FROM login_id WHERE id = {}"
-                .format(i))]
+                .format(index[i]))]
 
             TimeListUpdate(i)
 
             now_text = [x[0] for x in cursor.execute(
                 "SELECT list_text FROM login_id WHERE id = {}".
-                format(i))]
+                format(index[i]))]
 
             if now_text[0] != old_text[0]:
                 try:
-                    await bot.send_message(i, now_text[0])
+                    await bot.send_message(index[i], now_text[0])
                 except BotBlocked:
                     await asyncio.sleep(0.1)
 
@@ -572,9 +572,11 @@ async def ListTimeUpdater():    # Обновление расписания в �
         i = 0
         for _ in index_count:
             try:
-                TimeListUpdate(i)
+                TimeListUpdate(index_count[i])
             except:
                 await asyncio.sleep(0.1)
+
+            i += 1
 
         await asyncio.sleep(3600)
 
