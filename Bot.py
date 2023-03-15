@@ -476,7 +476,7 @@ async def AutoTime():       # Авто расписание
 
     check = 1
     while auto:
-        auto = [x[0] for x in cursor.execute(
+        auto_people = [x[0] for x in cursor.execute(
             "SELECT id FROM login_id WHERE auto_time = {}".format(1))]
 
         if datetime.now().strftime("%H:%M") == '20:55':
@@ -485,9 +485,10 @@ async def AutoTime():       # Авто расписание
         i = 0
         await asyncio.sleep(20)
         if datetime.now().strftime("%H:%M") == '21:00' and check == 1:
-            for _ in auto:
+            for _ in auto_people:
                 try:
-                    await bot.send_message(auto[i], TimeList(auto[i]))
+                    await bot.send_message(auto_people[i],
+                                           TimeList(auto_people[i]))
                 except BotBlocked:
                     await asyncio.sleep(0.1)
 
@@ -520,23 +521,23 @@ async def ListUpdate():     # Авто обновление расписания
             "SELECT id FROM login_id WHERE group_id != {}".format(0))]
 
     while index_count:
-        index_count = [x[0] for x in cursor.execute(
+        index = [x[0] for x in cursor.execute(
             "SELECT id FROM login_id WHERE group_id != {}".format(0))]
 
-        for index in index_count:
+        for people in index:
             old_text = [x[0] for x in cursor.execute(
                 "SELECT list_text FROM login_id WHERE id = {}"
-                .format(index))]
+                .format(people))]
 
-            TimeListUpdate(index)
+            TimeListUpdate(people)
 
             now_text = [x[0] for x in cursor.execute(
                 "SELECT list_text FROM login_id WHERE id = {}".
-                format(index))]
+                format(people))]
 
             if now_text[0] != old_text[0]:
                 try:
-                    await bot.send_message(index[0], now_text[0])
+                    await bot.send_message(people, now_text[0])
                 except BotBlocked:
                     await asyncio.sleep(0.1)
 
