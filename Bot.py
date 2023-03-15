@@ -524,24 +524,25 @@ async def ListUpdate():     # Авто обновление расписания
         index = [x[0] for x in cursor.execute(
             "SELECT id FROM login_id WHERE group_id != {}".format(0))]
 
-        for people in index:
+        i = 0
+        for _ in index:
             old_text = [x[0] for x in cursor.execute(
                 "SELECT list_text FROM login_id WHERE id = {}"
-                .format(people))]
+                .format(i))]
 
-            TimeListUpdate(people)
+            TimeListUpdate(i)
 
             now_text = [x[0] for x in cursor.execute(
                 "SELECT list_text FROM login_id WHERE id = {}".
-                format(people))]
+                format(i))]
 
             if now_text[0] != old_text[0]:
                 try:
-                    await bot.send_message(people, now_text[0])
+                    await bot.send_message(i, now_text[0])
                 except BotBlocked:
                     await asyncio.sleep(0.1)
 
-            await asyncio.sleep(0.1)
+            i += 1
 
         await asyncio.sleep(240)
 
@@ -568,10 +569,11 @@ async def ListTimeUpdater():    # Обновление расписания в �
         index_count = [x[0] for x in cursor.execute(
             "SELECT id FROM login_id WHERE group_id != {}".format(0))]
 
-        for index in index_count:
+        i = 0
+        for _ in index_count:
             try:
-                TimeListUpdate(index)
-            except TimeoutError:
+                TimeListUpdate(i)
+            except:
                 await asyncio.sleep(0.1)
 
         await asyncio.sleep(3600)
