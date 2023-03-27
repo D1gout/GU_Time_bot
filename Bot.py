@@ -1,3 +1,6 @@
+# git clone https://github.com/github.com/D1gout/TGBot.git
+# git
+
 import asyncio
 import json
 import logging
