@@ -87,7 +87,7 @@ def TimeListUpdate(index):
         text += "\n"
 
         if speed.get('type'):
-            text += f"«{speed['type']}»\n"
+            text += f"{speed['type']}\n"
 
         if speed.get('place'):
             text += f"{speed['place']}\n"
@@ -116,7 +116,7 @@ def TimeListUpdate(index):
         text += "\n"
 
         if speed.get('type'):
-            text += f"«{speed['type']}»\n"
+            text += f"{speed['type']}\n"
 
         if speed.get('place'):
             text += f"{speed['place']}\n"
@@ -607,10 +607,9 @@ async def ListTimeUpdater():    # Обновление расписания в �
 
 
 async def on_startup(_):
-    pass
-    # asyncio.create_task(AutoTime())
-    # asyncio.create_task(ListUpdate())
-    # asyncio.create_task(ListTimeUpdater())
+    asyncio.create_task(AutoTime())
+    asyncio.create_task(ListUpdate())
+    asyncio.create_task(ListTimeUpdater())
 
 
 @dp.callback_query_handler(lambda c: c.data == 'typ1_click')
