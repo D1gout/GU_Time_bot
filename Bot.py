@@ -608,7 +608,7 @@ async def ListTimeUpdater():    # Обновление расписания в �
 
 async def on_startup(_):
     asyncio.create_task(AutoTime())
-    asyncio.create_task(ListUpdate())
+    # asyncio.create_task(ListUpdate())
     asyncio.create_task(ListTimeUpdater())
 
 
