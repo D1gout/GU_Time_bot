@@ -547,11 +547,11 @@ async def ListUpdate():     # Авто обновление расписания
 
             if now_text[0] != old_text[0]:
                 try:
-                    print(now_text[0])
                     await bot.send_message(index[i], now_text[0])
                 except BotBlocked:
-                    print('Нет изменений')
                     await asyncio.sleep(0.1)
+            else:
+                print('Нет изменений')
 
             i += 1
 
