@@ -85,7 +85,7 @@ def TimeListUpdate(index):
                         if list_speed[i]["place"] is not None:
                             if list_speed[i]["classroom"] == "" or \
                                     list_speed[i]["classroom"] is None:
-                                text += list_speed[i]["discipline"] + " 1(" + \
+                                text += list_speed[i]["discipline"] + " (" + \
                                         list_speed[i]["notes"] + ")\n" \
                                         + list_speed[i]["place"] \
                                         + "\n" + list_speed[i]["time"] \
@@ -538,6 +538,8 @@ async def ListUpdate():     # Авто обновление расписания
             old_text = [x[0] for x in cursor.execute(
                 "SELECT list_text FROM login_id WHERE id = {}"
                 .format(index[i]))]
+
+            print(old_text)
 
             TimeListUpdate(index[i])
 
