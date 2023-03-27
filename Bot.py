@@ -87,7 +87,7 @@ def TimeListUpdate(index):
         text += "\n"
 
         if speed.get('type'):
-            text += f"{speed['type']}\n"
+            text += f"«{speed['type']}»\n"
 
         if speed.get('place'):
             text += f"{speed['place']}\n"
@@ -116,7 +116,7 @@ def TimeListUpdate(index):
         text += "\n"
 
         if speed.get('type'):
-            text += f"{speed['type']}\n"
+            text += f"«{speed['type']}»\n"
 
         if speed.get('place'):
             text += f"{speed['place']}\n"
