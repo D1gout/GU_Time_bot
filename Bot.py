@@ -539,8 +539,6 @@ async def ListUpdate():     # Авто обновление расписания
                 "SELECT list_text FROM login_id WHERE id = {}"
                 .format(index[i]))]
 
-            print(old_text)
-
             TimeListUpdate(index[i])
 
             now_text = [x[0] for x in cursor.execute(
@@ -549,6 +547,7 @@ async def ListUpdate():     # Авто обновление расписания
 
             if now_text[0] != old_text[0]:
                 try:
+                    print(now_text[0])
                     await bot.send_message(index[i], now_text[0])
                 except BotBlocked:
                     await asyncio.sleep(0.1)
