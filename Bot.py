@@ -607,9 +607,10 @@ async def ListTimeUpdater():    # Обновление расписания в �
 
 
 async def on_startup(_):
-    asyncio.create_task(AutoTime())
+    pass
+    # asyncio.create_task(AutoTime())
     # asyncio.create_task(ListUpdate())
-    asyncio.create_task(ListTimeUpdater())
+    # asyncio.create_task(ListTimeUpdater())
 
 
 @dp.callback_query_handler(lambda c: c.data == 'typ1_click')
