@@ -85,7 +85,7 @@ def TimeListUpdate(index):
                         if list_speed[i]["place"] is not None:
                             if list_speed[i]["classroom"] == "" or \
                                     list_speed[i]["classroom"] is None:
-                                text += list_speed[i]["discipline"] + " (" + \
+                                text += list_speed[i]["discipline"] + " 1(" + \
                                         list_speed[i]["notes"] + ")\n" \
                                         + list_speed[i]["place"] \
                                         + "\n" + list_speed[i]["time"] \
