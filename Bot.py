@@ -550,6 +550,7 @@ async def ListUpdate():     # Авто обновление расписания
                     print(now_text[0])
                     await bot.send_message(index[i], now_text[0])
                 except BotBlocked:
+                    print('Нет изменений')
                     await asyncio.sleep(0.1)
 
             i += 1
