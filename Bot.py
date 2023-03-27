@@ -81,61 +81,146 @@ def TimeListUpdate(index):
             if list_speed[i]["place"] != "" or \
                     list_speed[i]["place"] is not None:
                 if list_speed[i]["date"] == day:
-                    if list_speed[i]["notes"] != "":
-                        if list_speed[i]["place"] is not None:
-                            if list_speed[i]["classroom"] == "" or \
-                                    list_speed[i]["classroom"] is None:
-                                text += list_speed[i]["discipline"] + " (" + \
-                                        list_speed[i]["notes"] + ")\n" \
-                                        + list_speed[i]["place"] \
-                                        + "\n" + list_speed[i]["time"] \
-                                        + "\n\n"
+                    if list_speed[i]["type"] != "" or \
+                            list_speed[i]["type"] is not None:
+                        if list_speed[i]["notes"] != "":
+                            if list_speed[i]["place"] is not None:
+                                if list_speed[i]["classroom"] == "" or \
+                                        list_speed[i]["classroom"] is None:
+                                    text += list_speed[i]["discipline"] \
+                                            + " (" + \
+                                            list_speed[i]["notes"] + ")\n" \
+                                            + list_speed[i]["type"] + "\n" \
+                                            + list_speed[i]["place"] \
+                                            + "\n" + list_speed[i]["time"] \
+                                            + "\n\n"
+                                else:
+                                    text += list_speed[i]["discipline"] \
+                                            + " (" + \
+                                            list_speed[i]["notes"] + ")\n" \
+                                            + list_speed[i]["type"] + "\n" \
+                                            + list_speed[i]["place"] \
+                                            + "\n" + "ауд. " \
+                                            + list_speed[i]["classroom"] \
+                                            + "\n" + list_speed[i]["time"] \
+                                            + "\n\n"
                             else:
-                                text += list_speed[i]["discipline"] + " (" + \
-                                        list_speed[i]["notes"] + ")\n" \
-                                        + list_speed[i]["place"] \
-                                        + "\n" + "ауд. " + list_speed[i][
-                                            "classroom"] \
-                                        + "\n" + list_speed[i]["time"] \
-                                        + "\n\n"
+                                if list_speed[i]["classroom"] == "" or \
+                                        list_speed[i]["classroom"] is None:
+                                    text += list_speed[i]["discipline"] \
+                                            + " (" + \
+                                            list_speed[i]["notes"] + ")\n" \
+                                            + list_speed[i]["type"] + "\n" \
+                                            + list_speed[i]["time"] \
+                                            + "\n\n"
+                                else:
+                                    text += list_speed[i]["discipline"] \
+                                            + " (" + \
+                                            list_speed[i]["notes"] + ")\n" \
+                                            + list_speed[i]["type"] + "\n" \
+                                            + "ауд. " \
+                                            + list_speed[i]["classroom"] \
+                                            + "\n" + list_speed[i]["time"] \
+                                            + "\n\n"
                         else:
-                            if list_speed[i]["classroom"] == "" or \
-                                    list_speed[i]["classroom"] is None:
-                                text += list_speed[i]["discipline"] + " (" + \
-                                        list_speed[i]["notes"] + ")\n" \
-                                        + list_speed[i]["time"] \
-                                        + "\n\n"
+                            if list_speed[i]["place"] is not None:
+                                if list_speed[i]["classroom"] == "" or \
+                                        list_speed[i]["classroom"] is None:
+                                    text += list_speed[i]["discipline"] \
+                                            + "\n" + \
+                                            list_speed[i]["type"] + "\n" \
+                                            + list_speed[i]["place"] + "\n" \
+                                            + list_speed[i]["time"] \
+                                            + "\n\n"
+                                else:
+                                    text += list_speed[i]["discipline"] \
+                                            + "\n" + \
+                                            list_speed[i]["type"] + "\n" \
+                                            + list_speed[i]["place"] + "\n" \
+                                            + "ауд. " \
+                                            + list_speed[i]["classroom"] \
+                                            + "\n" + list_speed[i]["time"] \
+                                            + "\n\n"
                             else:
-                                text += list_speed[i]["discipline"] + " (" + \
-                                        list_speed[i]["notes"] + ")\n" \
-                                        + "ауд. " \
-                                        + list_speed[i]["classroom"] \
-                                        + "\n" + list_speed[i]["time"] \
-                                        + "\n\n"
-                    else:
-                        if list_speed[i]["place"] is not None:
-                            if list_speed[i]["classroom"] == "" or \
-                                    list_speed[i]["classroom"] is None:
-                                text += list_speed[i]["discipline"] + "\n" + \
-                                        list_speed[i]["place"] + "\n" \
-                                        + list_speed[i]["time"] \
-                                        + "\n\n"
-                            else:
-                                text += list_speed[i]["discipline"] + "\n" + \
-                                        list_speed[i]["place"] + "\n" \
-                                        + "ауд. " \
-                                        + list_speed[i]["classroom"] \
-                                        + "\n" + list_speed[i]["time"] \
-                                        + "\n\n"
-                        else:
-                            if list_speed[i]["classroom"] == "" or \
-                                    list_speed[i]["classroom"] is None:
-                                text += list_speed[i]["discipline"] + "\n" + \
-                                        list_speed[i]["time"] + "\n\n"
+                                if list_speed[i]["classroom"] == "" or \
+                                        list_speed[i]["classroom"] is None:
+                                    text += list_speed[i]["discipline"] \
+                                            + "\n" + \
+                                            list_speed[i]["type"] + "\n" \
+                                            + list_speed[i]["time"] + "\n\n"
 
+                                else:
+                                    text += list_speed[i]["discipline"] \
+                                            + "\n" + \
+                                            list_speed[i]["type"] + "\n" \
+                                            + list_speed[i]["time"] + "\n\n"
+                    else:
+                        if list_speed[i]["notes"] != "":
+                            if list_speed[i]["place"] is not None:
+                                if list_speed[i]["classroom"] == "" or \
+                                        list_speed[i]["classroom"] is None:
+                                    text += list_speed[i][
+                                                "discipline"] + " (" + \
+                                            list_speed[i]["notes"] + ")\n" \
+                                            + list_speed[i]["place"] \
+                                            + "\n" + list_speed[i]["time"] \
+                                            + "\n\n"
+                                else:
+                                    text += list_speed[i][
+                                                "discipline"] + " (" + \
+                                            list_speed[i]["notes"] + ")\n" \
+                                            + list_speed[i]["place"] \
+                                            + "\n" + "ауд. " \
+                                            + list_speed[i]["classroom"] \
+                                            + "\n" + list_speed[i]["time"] \
+                                            + "\n\n"
                             else:
-                                text += list_speed[i]["discipline"] + "\n" + \
-                                        list_speed[i]["time"] + "\n" + "\n\n"
+                                if list_speed[i]["classroom"] == "" or \
+                                        list_speed[i]["classroom"] is None:
+                                    text += list_speed[i][
+                                                "discipline"] + " (" + \
+                                            list_speed[i]["notes"] + ")\n" \
+                                            + list_speed[i]["time"] \
+                                            + "\n\n"
+                                else:
+                                    text += list_speed[i][
+                                                "discipline"] + " (" + \
+                                            list_speed[i]["notes"] + ")\n" \
+                                            + "ауд. " \
+                                            + list_speed[i]["classroom"] \
+                                            + "\n" + list_speed[i]["time"] \
+                                            + "\n\n"
+                        else:
+                            if list_speed[i]["place"] is not None:
+                                if list_speed[i]["classroom"] == "" or \
+                                        list_speed[i]["classroom"] is None:
+                                    text += list_speed[i][
+                                                "discipline"] + "\n" + \
+                                            list_speed[i]["place"] + "\n" \
+                                            + list_speed[i]["time"] \
+                                            + "\n\n"
+                                else:
+                                    text += list_speed[i][
+                                                "discipline"] + "\n" + \
+                                            list_speed[i]["place"] + "\n" \
+                                            + "ауд. " \
+                                            + list_speed[i]["classroom"] \
+                                            + "\n" + list_speed[i]["time"] \
+                                            + "\n\n"
+                            else:
+                                if list_speed[i]["classroom"] == "" or \
+                                        list_speed[i]["classroom"] is None:
+                                    text += list_speed[i][
+                                                "discipline"] + "\n" + \
+                                            list_speed[i]["time"] + "\n\n"
+
+                                else:
+                                    text += list_speed[i][
+                                                "discipline"] + "\n" + \
+                                            list_speed[i][
+                                                "time"] + "\n" + "\n\n"
+
+
 
     text_new = text
 
@@ -150,68 +235,17 @@ def TimeListUpdate(index):
     if weekday == "7":
         list_speed = list["next"]["data"]
 
-    for i in range(len(list_speed)):
-        if list_speed[i]["discipline"] != "" or \
-                list_speed[i]["discipline"] is not None:
-            if list_speed[i]["place"] != "" or \
-                    list_speed[i]["place"] is not None:
-                if list_speed[i]["date"] == nextDay:
-                    if list_speed[i]["notes"] != "":
-                        if list_speed[i]["place"] is not None:
-                            if list_speed[i]["classroom"] == "" or \
-                                    list_speed[i]["classroom"] is None:
-                                text += list_speed[i]["discipline"] + " (" + \
-                                        list_speed[i]["notes"] + ")\n" \
-                                        + list_speed[i]["place"] \
-                                        + "\n" + list_speed[i]["time"] \
-                                        + "\n\n"
-                            else:
-                                text += list_speed[i]["discipline"] + " (" + \
-                                        list_speed[i]["notes"] + ")\n" \
-                                        + list_speed[i]["place"] \
-                                        + "\n" + "ауд. " + list_speed[i][
-                                            "classroom"] \
-                                        + "\n" + list_speed[i]["time"] \
-                                        + "\n\n"
-                        else:
-                            if list_speed[i]["classroom"] == "" or \
-                                    list_speed[i]["classroom"] is None:
-                                text += list_speed[i]["discipline"] + " (" + \
-                                        list_speed[i]["notes"] + ")\n" \
-                                        + list_speed[i]["time"] \
-                                        + "\n\n"
-                            else:
-                                text += list_speed[i]["discipline"] + " (" + \
-                                        list_speed[i]["notes"] + ")\n" \
-                                        + "ауд. " + \
-                                        list_speed[i]["classroom"] + \
-                                        "\n" + list_speed[i]["time"] \
-                                        + "\n\n"
-                    else:
-                        if list_speed[i]["place"] is not None:
-                            if list_speed[i]["classroom"] == "" or \
-                                    list_speed[i]["classroom"] is None:
-                                text += list_speed[i]["discipline"] + \
-                                        "\n" + list_speed[i]["place"] + \
-                                        "\n" \
-                                        + list_speed[i]["time"] \
-                                        + "\n\n"
-                            else:
-                                text += list_speed[i]["discipline"] + "\n" + \
-                                        list_speed[i]["place"] + "\n" \
-                                        + "ауд. " + \
-                                        list_speed[i]["classroom"] + \
-                                        "\n" + list_speed[i]["time"] \
-                                        + "\n\n"
-                        else:
-                            if list_speed[i]["classroom"] == "" or \
-                                    list_speed[i]["classroom"] is None:
-                                text += list_speed[i]["discipline"] + "\n" + \
-                                        list_speed[i]["time"] + "\n\n"
+    for speed in list_speed:
+        if speed["date"] != nextDay:
+            continue
 
-                            else:
-                                text += list_speed[i]["discipline"] + "\n" + \
-                                        list_speed[i]["time"] + "\n" + "\n\n"
+        text += f"{speed['discipline']} ({speed['notes']})\n{speed['type']}\n"
+
+        if speed["place"]:
+            text += f"{speed['place']}\n"
+        if speed["classroom"]:
+            text += f"ауд. {speed['classroom']}\n"
+        text += f"{speed['time']}\n\n"
 
     text_new = text
     if text_old == text_new and text_new != "Расписание отсутствует\n\n" \
@@ -285,69 +319,172 @@ async def FullList(index):
                 if list_speed[i]["place"] != "" or \
                         list_speed[i]["place"] is not None:
                     if list_speed[i]["weekday"] == str(j):
-                        if list_speed[i]["notes"] != "":
-                            if list_speed[i]["place"] is not None:
-                                if list_speed[i]["classroom"] == "" or \
-                                        list_speed[i]["classroom"] is None:
-                                    text += list_speed[i]["discipline"] \
-                                            + " (" + list_speed[i]["notes"] \
-                                            + ")\n" \
-                                            + list_speed[i]["place"] \
-                                            + "\n" + list_speed[i]["time"] \
-                                            + "\n\n"
+                        if list_speed[i]["type"] != "":
+                            if list_speed[i]["notes"] != "":
+                                if list_speed[i]["place"] is not None:
+                                    if list_speed[i]["classroom"] == "" or \
+                                            list_speed[i]["classroom"] is None:
+                                        text += list_speed[i]["discipline"] \
+                                                + " (" \
+                                                + list_speed[i]["notes"] \
+                                                + ")\n" \
+                                                + list_speed[i]["type"] + "\n"\
+                                                + list_speed[i]["place"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
+                                    else:
+                                        text += list_speed[i]["discipline"] \
+                                                + " (" \
+                                                + list_speed[i]["notes"] \
+                                                + ")\n" \
+                                                + list_speed[i]["type"] \
+                                                + "\n" \
+                                                + list_speed[i]["place"] \
+                                                + "\n" + "ауд. " \
+                                                + list_speed[i]["classroom"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
                                 else:
-                                    text += list_speed[i]["discipline"] \
-                                            + " (" + list_speed[i]["notes"] \
-                                            + ")\n" \
-                                            + list_speed[i]["place"] \
-                                            + "\n" + "ауд. " + list_speed[i][
-                                                "classroom"] \
-                                            + "\n" + list_speed[i]["time"] \
-                                            + "\n\n"
+                                    if list_speed[i]["classroom"] == "" or \
+                                            list_speed[i]["classroom"] is None:
+                                        text += list_speed[i]["discipline"] \
+                                                + " (" \
+                                                + list_speed[i]["notes"] \
+                                                + ")\n" \
+                                                + list_speed[i]["type"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
+                                    else:
+                                        text += list_speed[i]["discipline"] \
+                                                + " (" \
+                                                + list_speed[i]["notes"] \
+                                                + ")\n" \
+                                                + list_speed[i]["type"] \
+                                                + "\n" \
+                                                + "ауд. " \
+                                                + list_speed[i]["classroom"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
                             else:
-                                if list_speed[i]["classroom"] == "" or \
-                                        list_speed[i]["classroom"] is None:
-                                    text += list_speed[i]["discipline"] \
-                                            + " (" \
-                                            + list_speed[i]["notes"] + ")\n" \
-                                            + list_speed[i]["time"] \
-                                            + "\n\n"
+                                if list_speed[i]["place"] is not None:
+                                    if list_speed[i]["classroom"] == "" or \
+                                            list_speed[i]["classroom"] is None:
+                                        text += list_speed[i]["discipline"] \
+                                                + "\n" \
+                                                + list_speed[i]["type"] \
+                                                + "\n" \
+                                                + list_speed[i]["place"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
+                                    else:
+                                        text += list_speed[i][
+                                                    "discipline"] + "\n" + \
+                                                list_speed[i]["type"] + "\n" \
+                                                + list_speed[i]["place"] \
+                                                + "\n" \
+                                                + "ауд. " \
+                                                + list_speed[i]["classroom"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
                                 else:
-                                    text += list_speed[i]["discipline"] \
-                                            + " (" + list_speed[i]["notes"] \
-                                            + ")\n" \
-                                            + "ауд. " \
-                                            + list_speed[i]["classroom"] \
-                                            + "\n" + list_speed[i]["time"] \
-                                            + "\n\n"
-                        else:
-                            if list_speed[i]["place"] is not None:
-                                if list_speed[i]["classroom"] == "" or \
-                                        list_speed[i]["classroom"] is None:
-                                    text += list_speed[i]["discipline"] \
-                                            + "\n" + list_speed[i]["place"] \
-                                            + "\n" \
-                                            + list_speed[i]["time"] \
-                                            + "\n\n"
-                                else:
-                                    text += list_speed[i][
-                                                "discipline"] + "\n" + \
-                                            list_speed[i]["place"] + "\n" \
-                                            + "ауд. " \
-                                            + list_speed[i]["classroom"] \
-                                            + "\n" + list_speed[i]["time"] \
-                                            + "\n\n"
-                            else:
-                                if list_speed[i]["classroom"] == "" or \
-                                        list_speed[i]["classroom"] is None:
-                                    text += list_speed[i]["discipline"] + \
-                                            "\n" + list_speed[i]["time"] + \
-                                            "\n\n"
+                                    if list_speed[i]["classroom"] == "" or \
+                                            list_speed[i]["classroom"] is None:
+                                        text += list_speed[i]["discipline"] + \
+                                                "\n" \
+                                                + list_speed[i]["type"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] + \
+                                                "\n\n"
 
+                                    else:
+                                        text += list_speed[i]["discipline"] + \
+                                                "\n" \
+                                                + list_speed[i]["type"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] + \
+                                                "\n" + "\n\n"
+                        else:
+                            if list_speed[i]["notes"] != "":
+                                if list_speed[i]["place"] is not None:
+                                    if list_speed[i]["classroom"] == "" or \
+                                            list_speed[i]["classroom"] is None:
+                                        text += list_speed[i]["discipline"] \
+                                                + " (" \
+                                                + list_speed[i]["notes"] \
+                                                + ")\n" \
+                                                + list_speed[i]["place"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
+                                    else:
+                                        text += list_speed[i]["discipline"] \
+                                                + " (" \
+                                                + list_speed[i]["notes"] \
+                                                + ")\n" \
+                                                + list_speed[i]["place"] \
+                                                + "\n" + "ауд. " + \
+                                                list_speed[i][
+                                                    "classroom"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
                                 else:
-                                    text += list_speed[i]["discipline"] + \
-                                            "\n" + list_speed[i]["time"] + \
-                                            "\n" + "\n\n"
+                                    if list_speed[i]["classroom"] == "" or \
+                                            list_speed[i]["classroom"] is None:
+                                        text += list_speed[i]["discipline"] \
+                                                + " (" \
+                                                + list_speed[i][
+                                                    "notes"] + ")\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
+                                    else:
+                                        text += list_speed[i]["discipline"] \
+                                                + " (" \
+                                                + list_speed[i]["notes"] \
+                                                + ")\n" \
+                                                + "ауд. " \
+                                                + list_speed[i]["classroom"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
+                            else:
+                                if list_speed[i]["place"] is not None:
+                                    if list_speed[i]["classroom"] == "" or \
+                                            list_speed[i]["classroom"] is None:
+                                        text += list_speed[i]["discipline"] \
+                                                + "\n" \
+                                                + list_speed[i]["place"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
+                                    else:
+                                        text += list_speed[i][
+                                                    "discipline"] + "\n" + \
+                                                list_speed[i]["place"] + "\n" \
+                                                + "ауд. " \
+                                                + list_speed[i]["classroom"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
+                                else:
+                                    if list_speed[i]["classroom"] == "" or \
+                                            list_speed[i]["classroom"] is None:
+                                        text += list_speed[i]["discipline"] + \
+                                                "\n" \
+                                                + list_speed[i]["time"] + \
+                                                "\n\n"
+
+                                    else:
+                                        text += list_speed[i]["discipline"] + \
+                                                "\n" \
+                                                + list_speed[i]["time"] + \
+                                                "\n" + "\n\n"
 
         text_new = text
         if text_old == text_new and text_new != "Расписание отсутствует\n\n" \
