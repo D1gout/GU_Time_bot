@@ -1,6 +1,7 @@
 import asyncio
 import json
 import logging
+import re
 import sqlite3
 from datetime import datetime
 
@@ -60,6 +61,9 @@ def TimeListUpdate(index):
            'action': 'lau_shedule_students_show'
            }
     req = requests.post(__URL, data=col).text
+
+    req = re.sub('<[^<]+?>', '', req)
+    req = re.sub('&quot;', '', req)
     try:
         list = json.loads(req)
     except json.decoder.JSONDecodeError:
@@ -252,6 +256,9 @@ async def FullList(index):
            'action': 'lau_shedule_students_show'
            }
     req = requests.post(__URL, data=col).text
+
+    req = re.sub('<[^<]+?>', '', req)
+    req = re.sub('&quot;', '', req)
     try:
         list = json.loads(req)
     except json.decoder.JSONDecodeError:
