@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="dataSourceStorageLocal" created-in="PY-223.8617.48">
-    <data-source name="users" uuid="d9cc5536-e838-4ae0-82eb-23410ae190a4">
+    <data-source name="users" uuid="e1a52a13-efd4-46ba-a0f0-2b7944cebb4a">
       <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="SQLITE" exact-version="0" />
+      <auth-provider>no-auth</auth-provider>
       <schema-mapping />
     </data-source>
   </component>
