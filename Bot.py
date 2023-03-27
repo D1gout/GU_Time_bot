@@ -64,6 +64,7 @@ def TimeListUpdate(index):
 
     req = re.sub('<[^<]+?>', '', req)
     req = re.sub('&quot;', '', req)
+    req = re.sub('http://open.gu', 'https://open.gu-ural.ru', req)
     try:
         list = json.loads(req)
     except json.decoder.JSONDecodeError:
@@ -259,6 +260,7 @@ async def FullList(index):
 
     req = re.sub('<[^<]+?>', '', req)
     req = re.sub('&quot;', '', req)
+    req = re.sub('http://open.gu', 'https://open.gu-ural.ru', req)
     try:
         list = json.loads(req)
     except json.decoder.JSONDecodeError:
