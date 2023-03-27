@@ -164,13 +164,15 @@ def TimeListUpdate(index):
                         if list_speed[i]["place"] is not None:
                             if list_speed[i]["classroom"] == "" or \
                                     list_speed[i]["classroom"] is None:
-                                text += list_speed[i]["discipline"] + " (" + \
+                                text += list_speed[i]["discipline"] \
+                                        + " \n(" + \
                                         list_speed[i]["notes"] + ")\n" \
                                         + list_speed[i]["place"] \
                                         + "\n" + list_speed[i]["time"] \
                                         + "\n\n"
                             else:
-                                text += list_speed[i]["discipline"] + " (" + \
+                                text += list_speed[i]["discipline"] \
+                                        + " \n(" + \
                                         list_speed[i]["notes"] + ")\n" \
                                         + list_speed[i]["place"] \
                                         + "\n" + "ауд. " + list_speed[i][
@@ -180,12 +182,14 @@ def TimeListUpdate(index):
                         else:
                             if list_speed[i]["classroom"] == "" or \
                                     list_speed[i]["classroom"] is None:
-                                text += list_speed[i]["discipline"] + " (" + \
+                                text += list_speed[i]["discipline"] + \
+                                        " \n(" + \
                                         list_speed[i]["notes"] + ")\n" \
                                         + list_speed[i]["time"] \
                                         + "\n\n"
                             else:
-                                text += list_speed[i]["discipline"] + " (" + \
+                                text += list_speed[i]["discipline"] + \
+                                        " \n(" + \
                                         list_speed[i]["notes"] + ")\n" \
                                         + "ауд. " + \
                                         list_speed[i]["classroom"] + \
@@ -294,14 +298,14 @@ async def FullList(index):
                                 if list_speed[i]["classroom"] == "" or \
                                         list_speed[i]["classroom"] is None:
                                     text += list_speed[i]["discipline"] \
-                                            + " (" + list_speed[i]["notes"] \
+                                            + " \n(" + list_speed[i]["notes"] \
                                             + ")\n" \
                                             + list_speed[i]["place"] \
                                             + "\n" + list_speed[i]["time"] \
                                             + "\n\n"
                                 else:
                                     text += list_speed[i]["discipline"] \
-                                            + " (" + list_speed[i]["notes"] \
+                                            + " \n(" + list_speed[i]["notes"] \
                                             + ")\n" \
                                             + list_speed[i]["place"] \
                                             + "\n" + "ауд. " + list_speed[i][
@@ -312,13 +316,13 @@ async def FullList(index):
                                 if list_speed[i]["classroom"] == "" or \
                                         list_speed[i]["classroom"] is None:
                                     text += list_speed[i]["discipline"] \
-                                            + " (" \
+                                            + " \n(" \
                                             + list_speed[i]["notes"] + ")\n" \
                                             + list_speed[i]["time"] \
                                             + "\n\n"
                                 else:
                                     text += list_speed[i]["discipline"] \
-                                            + " (" + list_speed[i]["notes"] \
+                                            + " \n(" + list_speed[i]["notes"] \
                                             + ")\n" \
                                             + "ауд. " \
                                             + list_speed[i]["classroom"] \
