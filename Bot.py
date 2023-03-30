@@ -555,7 +555,10 @@ async def ListUpdate():     # Авто обновление расписания
                 "SELECT list_text FROM login_id WHERE id = {}"
                 .format(index[i]))]
 
-            TimeListUpdate(index[i])
+            try:
+                TimeListUpdate(index[i])
+            except:
+                await asyncio.sleep(0.1)
 
             now_text = [x[0] for x in cursor.execute(
                 "SELECT list_text FROM login_id WHERE id = {}".
