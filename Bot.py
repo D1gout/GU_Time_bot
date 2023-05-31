@@ -207,7 +207,7 @@ async def FullList(index):
                                                 + " (" \
                                                 + list_speed[i]["notes"] \
                                                 + ")\n" \
-                                                + list_speed[i]["type"] + "\n"\
+                                                + list_speed[i]["type"] + "\n" \
                                                 + list_speed[i]["place"] \
                                                 + "\n" \
                                                 + list_speed[i]["time"] \
@@ -475,7 +475,7 @@ markup6 = ReplyKeyboardMarkup(resize_keyboard=True,
 )
 
 
-async def AutoTime():       # Авто расписание
+async def AutoTime():  # Авто расписание
     connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
 
@@ -521,7 +521,7 @@ async def AutoTime():       # Авто расписание
                 i += 1
 
 
-async def ListUpdate():     # Авто обновление расписания
+async def ListUpdate():  # Авто обновление расписания
     connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
 
@@ -575,7 +575,7 @@ async def ListUpdate():     # Авто обновление расписания
         await asyncio.sleep(240)
 
 
-async def ListTimeUpdater():    # Обновление расписания в БД раз в час
+async def ListTimeUpdater():  # Обновление расписания в БД раз в час
     connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
 
@@ -609,10 +609,40 @@ async def ListTimeUpdater():    # Обновление расписания в �
         await asyncio.sleep(3600)
 
 
+async def StopMessage():  # Сообщение о начале каникул
+    connect = sqlite3.connect('users.db')
+    cursor = connect.cursor()
+
+    cursor.execute("""CREATE TABLE IF NOT EXISTS login_id(
+                id INTEGER,
+                speciality_id STRING NOT NULL DEFAULT '0',
+                course_id STRING NOT NULL DEFAULT '0',
+                group_id STRING NOT NULL DEFAULT '0',
+                auto_time STRING NOT NULL DEFAULT '0',
+                list_text TEXT NOT NULL DEFAULT 'None'
+            )""")
+
+    connect.commit()
+
+    index_count = [x[0] for x in cursor.execute(
+        "SELECT id FROM login_id WHERE group_id != {}".format(0))]
+
+    i = 0
+    for _ in index_count:
+        try:
+            await bot.send_message(index_count[i], 'Спасибо, что пользовались ботом,'
+                                                   ' хороших каникул, у кого они уже начались!')
+        except:
+            await asyncio.sleep(0.1)
+
+        i += 1
+
+
 async def on_startup(_):
     asyncio.create_task(AutoTime())
     asyncio.create_task(ListUpdate())
     asyncio.create_task(ListTimeUpdater())
+    # asyncio.create_task(StopMessage())
 
 
 @dp.callback_query_handler(lambda c: c.data == 'typ1_click')
