@@ -27,7 +27,7 @@ Python (3.10 or later)
    <br><strong>or</strong>
    <br>`$ python3 Bot.py`
 
-### Holidays
+## Holidays
 #### Turn on
 1. Open utils\settings.ini and change
    <br>`stop = 1`
