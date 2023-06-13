@@ -1,3 +1,0 @@
-TOKEN = "5975391066:AAEHxpuSeVYz4fidfGbV61zuKN4zOrxGvDY"
-
-SLEEP = False
