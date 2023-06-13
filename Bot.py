@@ -643,7 +643,7 @@ async def StopMessage():  # Сообщение о начале каникул
 
         i += 1
 
-    f = open('config.py', "w")
+    f = open('utils/config.py', "w")
     f.write('TOKEN = "0"\n\nSLEEP = True')
 
 
