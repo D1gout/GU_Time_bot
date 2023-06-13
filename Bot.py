@@ -26,6 +26,9 @@ def TimeList(index):
         "SELECT list_text FROM login_id WHERE id = {}"
         .format(index)).fetchone()
 
+    if text is None:
+        text = "Подождите пару минут, расписание обновляется"
+
     return text[0]
 
 
