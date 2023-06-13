@@ -12,7 +12,7 @@ from aiogram.utils.exceptions import BotBlocked
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, \
     InlineKeyboardButton, InlineKeyboardMarkup
 
-from utils.config import TOKEN
+from utils.config import TOKEN, SLEEP
 from utils.weekday import WEEKDAYS
 
 
@@ -636,12 +636,15 @@ async def StopMessage():  # Сообщение о начале каникул
     i = 0
     for _ in index_count:
         try:
-            await bot.send_message(index_count[i], 'Спасибо, что пользовались ботом,'
-                                                   ' хороших каникул, у кого они уже начались!')
+            await bot.send_message(index_count[i], 'Спасибо, что пользовались ботом\n'
+                                                   'ФКТ желает хороших каникул тем, у кого они уже начались!')
         except:
             await asyncio.sleep(0.1)
 
         i += 1
+
+    f = open('config.py', "w")
+    f.write('TOKEN = "0"\n\nSLEEP = True')
 
 
 async def on_startup(_):
@@ -1219,4 +1222,5 @@ async def echo(message: types.Message):
 
 
 if __name__ == '__main__':
-    executor.start_polling(dp, on_startup=on_startup, skip_updates=True)
+    if SLEEP:
+        executor.start_polling(dp, on_startup=on_startup, skip_updates=True)
