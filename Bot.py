@@ -21,11 +21,18 @@ config.read(path)
 
 TOKEN = config.get("Settings", "token")
 SLEEP = config.get("Settings", "sleep_mode")
+STOP = config.get("Settings", "stop")
 
 
 def TimeList(index):
     connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
+
+    error = ''
+
+    for group_error in cursor.execute(
+            "SELECT group_id FROM login_id WHERE id = {}".format(index)):
+        error += str(group_error)[1]
 
     connect.commit()
 
@@ -33,8 +40,13 @@ def TimeList(index):
         "SELECT list_text FROM login_id WHERE id = {}"
         .format(index)).fetchone()
 
-    if text is None:
+    if error == '0':
+        text = "Пожалуйста пересоздайте аккаунт\n\n" \
+               "P.S. скорее всего я что-то обновил и ваш аккаунт потерялся("
+        return text
+    elif text[0] == "None":
         text = "Подождите пару минут, расписание обновляется"
+        return text
 
     return text[0]
 
@@ -588,7 +600,7 @@ async def ListUpdate():  # Авто обновление расписания
 
             i += 1
 
-        await asyncio.sleep(240)
+        await asyncio.sleep(300)
 
 
 async def ListTimeUpdater():  # Обновление расписания в БД раз в час
@@ -663,7 +675,8 @@ async def on_startup(_):
     asyncio.create_task(AutoTime())
     asyncio.create_task(ListUpdate())
     asyncio.create_task(ListTimeUpdater())
-    asyncio.create_task(StopMessage())
+    if STOP == "1":
+        asyncio.create_task(StopMessage())
 
 
 @dp.callback_query_handler(lambda c: c.data == 'typ1_click')
@@ -1112,9 +1125,9 @@ async def echo(message: types.Message):
 
     if message.text == 'Обновить':
         if TimeList(people_id) == "Пожалуйста пересоздайте аккаунт\n\n" \
-                                  "P.S. скорее всего я что-то " \
-                                  "обновил и ваш аккаунт потерялся(":
-            await message.answer(TimeList(people_id),
+                                  "P.S. скорее всего я что-то обновил и ваш аккаунт потерялся(":
+            await message.answer("Пожалуйста пересоздайте аккаунт\n\n"
+                                 "P.S. скорее всего я что-то обновил и ваш аккаунт потерялся(",
                                  reply_markup=button_start)
         else:
             await message.answer(TimeList(people_id),
