@@ -651,7 +651,7 @@ async def on_startup(_):
     asyncio.create_task(AutoTime())
     asyncio.create_task(ListUpdate())
     asyncio.create_task(ListTimeUpdater())
-    # asyncio.create_task(StopMessage())
+    asyncio.create_task(StopMessage())
 
 
 @dp.callback_query_handler(lambda c: c.data == 'typ1_click')
@@ -1222,5 +1222,5 @@ async def echo(message: types.Message):
 
 
 if __name__ == '__main__':
-    if SLEEP:
+    if SLEEP is False:
         executor.start_polling(dp, on_startup=on_startup, skip_updates=True)
