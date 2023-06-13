@@ -20,7 +20,7 @@ Python (3.10 or later)
    <br>`$ pip install -r requirements.txt`
    <br><strong>or</strong>
    <br>`$ pip3 install -r requirements.txt`
-3. Open utils - config.py
+3. Open utils\config.py
    <br>`TOKEN = 'YOUR_TOKEN_HERE'`
 4. Run project
    <br>`$ python Bot.py`
