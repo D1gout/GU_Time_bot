@@ -33,6 +33,8 @@ jobs:
       run: |
         cat << E0F > .env
         BOT_TOKEN=${{ secrets.BOT_TOKEN }}
+        sleep_mode=False
+        stop=1
         E0F
 
     - name: Setup Bot.py

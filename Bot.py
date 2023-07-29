@@ -21,11 +21,12 @@ configs = configparser.ConfigParser()
 configs.read(path)
 
 TOKEN = configs.get("Settings", "token")
-if TOKEN == "YOUR_TOKEN_HERE":
-    TOKEN = config('BOT_TOKEN')
 SLEEP = configs.get("Settings", "sleep_mode")
 STOP = configs.get("Settings", "stop")
-
+if TOKEN == "YOUR_TOKEN_HERE":
+    TOKEN = config('BOT_TOKEN')
+    SLEEP = config('sleep_mode')
+    STOP = config('stop')
 
 def TimeList(index):
     connect = sqlite3.connect('users.db')
