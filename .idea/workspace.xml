@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="65c1b10b-1071-4541-b8c2-c3a52cf50e13" name="Changes" comment="Update">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/python-app.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/python-app.yml" afterDir="false" />
-    </list>
+    <list default="true" id="65c1b10b-1071-4541-b8c2-c3a52cf50e13" name="Changes" comment="Update" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -76,7 +74,7 @@
       <workItem from="1689186573654" duration="219000" />
       <workItem from="1690541338733" duration="3041000" />
       <workItem from="1690609890323" duration="59000" />
-      <workItem from="1690610475926" duration="2430000" />
+      <workItem from="1690610475926" duration="2790000" />
     </task>
     <task id="LOCAL-00001" summary="Update Bot.py">
       <created>1686683078664</created>
@@ -200,7 +198,23 @@
       <option name="project" value="LOCAL" />
       <updated>1690612698852</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Update">
+      <option name="closed" value="true" />
+      <created>1690613092258</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1690613092258</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Update">
+      <option name="closed" value="true" />
+      <created>1690613239048</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1690613239048</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
