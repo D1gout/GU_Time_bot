@@ -33,7 +33,10 @@ jobs:
       env:
         BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
       run: |
-        sed -i 's/^token=.*/token=$BOT_TOKEN/' utils/settings.ini
+        
+        bot_token="$BOT_TOKEN"
+        
+        sed -i 's/^token=.*/token=$bot_token/' utils/settings.ini
         
         cat utils/settings.ini
 
