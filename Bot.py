@@ -5,7 +5,7 @@ import re
 import sqlite3
 import configparser
 from datetime import datetime
-import decouple
+from decouple import config
 
 import pendulum
 import requests
@@ -22,7 +22,7 @@ configs.read(path)
 
 TOKEN = configs.get("Settings", "token")
 if TOKEN == "YOUR_TOKEN_HERE":
-    TOKEN = decouple.config('BOT_TOKEN')
+    TOKEN = config('BOT_TOKEN')
 SLEEP = configs.get("Settings", "sleep_mode")
 STOP = configs.get("Settings", "stop")
 

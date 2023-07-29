@@ -29,17 +29,6 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    - name: Run my script with the secret
-      env:
-        BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-      run: |
-        
-        bot_token="$BOT_TOKEN"
-                
-        sed -i 's/^token=.*/token=$bot_token/' utils/settings.ini
-        
-        cat utils/settings.ini
-
     - name: Setup Bot.py
       run: |
         # run the bot on dedicate server
