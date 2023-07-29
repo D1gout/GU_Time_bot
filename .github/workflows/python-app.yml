@@ -35,9 +35,7 @@ jobs:
       run: |
         
         bot_token="$BOT_TOKEN"
-        
-        cat $bot_token
-        
+                
         sed -i 's/^token=.*/token=$bot_token/' utils/settings.ini
         
         cat utils/settings.ini
