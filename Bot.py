@@ -5,6 +5,7 @@ import re
 import sqlite3
 import configparser
 from datetime import datetime
+import decouple
 
 import pendulum
 import requests
@@ -16,12 +17,14 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, \
 from utils.weekday import WEEKDAYS
 
 path = "utils/settings.ini"
-config = configparser.ConfigParser()
-config.read(path)
+configs = configparser.ConfigParser()
+configs.read(path)
 
-TOKEN = config.get("Settings", "token")
-SLEEP = config.get("Settings", "sleep_mode")
-STOP = config.get("Settings", "stop")
+TOKEN = configs.get("Settings", "token")
+if TOKEN == "YOUR_TOKEN_HERE":
+    TOKEN = decouple.config('BOT_TOKEN')
+SLEEP = configs.get("Settings", "sleep_mode")
+STOP = configs.get("Settings", "stop")
 
 
 def TimeList(index):
@@ -665,10 +668,10 @@ async def StopMessage():  # Сообщение о начале каникул
 
         i += 1
 
-    config.set("Settings", "sleep_mode", "True")
+    configs.set("Settings", "sleep_mode", "True")
 
     with open(path, "w") as config_file:
-        config.write(config_file)
+        configs.write(config_file)
 
 
 async def on_startup(_):
