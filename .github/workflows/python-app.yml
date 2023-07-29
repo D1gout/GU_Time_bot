@@ -30,13 +30,7 @@ jobs:
     - name: Setup Bot.py
       run: |
         # run the bot on dedicate server
-        path = "utils/settings.ini"
-        config = configparser.ConfigParser()
-        config.read(path)
-        
-        config.set("Settings", "token", ${{ secrets.BOT_TOKEN }})
+        sed -i 's/^option=.*/option=${{ secrets.BOT_TOKEN }}/' utils/settings.ini
 
-        with open(path, "w") as config_file:
-            config.write(config_file)
         
         python Bot.py
