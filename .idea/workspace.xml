@@ -74,7 +74,7 @@
       <workItem from="1686686941797" duration="2692000" />
       <workItem from="1689186521413" duration="48000" />
       <workItem from="1689186573654" duration="219000" />
-      <workItem from="1690541338733" duration="2430000" />
+      <workItem from="1690541338733" duration="3041000" />
     </task>
     <task id="LOCAL-00001" summary="Update Bot.py">
       <created>1686683078664</created>
@@ -142,7 +142,15 @@
       <option name="project" value="LOCAL" />
       <updated>1690543401395</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Add dedicate server">
+      <option name="closed" value="true" />
+      <created>1690544716494</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1690544716494</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
