@@ -30,7 +30,8 @@ jobs:
     - name: Setup Bot.py
       run: |
         # run the bot on dedicate server
-        sed -i 's/^option=.*/option=${{ secrets.BOT_TOKEN }}/' utils/settings.ini
-
+        BOT_TOKEN=${{ secrets.BOT_TOKEN }}
+        echo $BOT_TOKEN
+        sed -i 's/^option=.*/option=$BOT_TOKEN/' utils/settings.ini
         
         python Bot.py
