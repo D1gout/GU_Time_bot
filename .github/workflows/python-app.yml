@@ -29,6 +29,12 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
+    - name: Configure .env
+      run: |
+        cat << E0F > .env
+        BOT_TOKEN=${{ secrets.BOT_TOKEN }}
+        E0F
+
     - name: Setup Bot.py
       run: |
         # run the bot on dedicate server
