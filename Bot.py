@@ -846,7 +846,7 @@ async def echo(message: types.Message):
                                  reply_markup=button_restart)
         if speciality == '6':
             cursor.execute(
-                f"UPDATE login_id SET group_id = 787 WHERE id = {people_id};")
+                f"UPDATE login_id SET group_id = 921 WHERE id = {people_id};")
             connect.commit()
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
@@ -876,19 +876,19 @@ async def echo(message: types.Message):
                                  reply_markup=button_restart)
         if speciality == '11':
             cursor.execute(
-                f"UPDATE login_id SET group_id = 788 WHERE id = {people_id};")
+                f"UPDATE login_id SET group_id = 916 WHERE id = {people_id};")
             connect.commit()
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '12':
             cursor.execute(
-                f"UPDATE login_id SET group_id = 782 WHERE id = {people_id};")
+                f"UPDATE login_id SET group_id = 920 WHERE id = {people_id};")
             connect.commit()
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '13':
             cursor.execute(
-                f"UPDATE login_id SET group_id = 790 WHERE id = {people_id};")
+                f"UPDATE login_id SET group_id = 922 WHERE id = {people_id};")
             connect.commit()
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
@@ -927,7 +927,7 @@ async def echo(message: types.Message):
         #     (TimeList(people_id), reply_markup=button_restart)
         if speciality == '4':
             cursor.execute(
-                f"UPDATE login_id SET group_id = 793 WHERE id = {people_id};")
+                f"UPDATE login_id SET group_id = 917 WHERE id = {people_id};")
             connect.commit()
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
@@ -1071,7 +1071,7 @@ async def echo(message: types.Message):
                                  reply_markup=button_restart)
         if speciality == '4':
             cursor.execute(
-                f"UPDATE login_id SET group_id = 794 WHERE id = {people_id};")
+                f"UPDATE login_id SET group_id = 919 WHERE id = {people_id};")
             connect.commit()
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
