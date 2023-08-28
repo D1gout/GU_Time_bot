@@ -927,7 +927,7 @@ async def echo(message: types.Message):
         #     (TimeList(people_id), reply_markup=button_restart)
         if speciality == '4':
             cursor.execute(
-                f"UPDATE login_id SET group_id = 918 WHERE id = {people_id};")
+                f"UPDATE login_id SET group_id = 793 WHERE id = {people_id};")
             connect.commit()
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
@@ -1003,7 +1003,7 @@ async def echo(message: types.Message):
                                  reply_markup=button_restart)
         if speciality == '4':
             cursor.execute(
-                f"UPDATE login_id SET group_id = 795 WHERE id = {people_id};")
+                f"UPDATE login_id SET group_id = 918 WHERE id = {people_id};")
             connect.commit()
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
