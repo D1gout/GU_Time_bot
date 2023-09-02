@@ -30,31 +30,28 @@ if TOKEN == "YOUR_TOKEN_HERE":
 
 
 def TimeList(index):
-    # connect = sqlite3.connect('users.db')
-    # cursor = connect.cursor()
-    #
-    # error = ''
-    #
-    # for group_error in cursor.execute(
-    #         "SELECT group_id FROM login_id WHERE id = {}".format(index)):
-    #     error += str(group_error)[1]
-    #
-    # connect.commit()
-    #
-    # text = cursor.execute(
-    #     "SELECT list_text FROM login_id WHERE id = {}"
-    #     .format(index)).fetchone()
-    #
-    # if error == '0':
-    #     text = "Пожалуйста пересоздайте аккаунт\n\n" \
-    #            "P.S. скорее всего я что-то обновил и ваш аккаунт потерялся("
-    #     return text
-    # elif text[0] == "None":
-    #     text = "Подождите пару минут, расписание обновляется"
-    #     return text
+    connect = sqlite3.connect('users.db')
+    cursor = connect.cursor()
 
-    if True:
-        text = ["Бот обновляется под новый набор"]
+    error = ''
+
+    for group_error in cursor.execute(
+            "SELECT group_id FROM login_id WHERE id = {}".format(index)):
+        error += str(group_error)[1]
+
+    connect.commit()
+
+    text = cursor.execute(
+        "SELECT list_text FROM login_id WHERE id = {}"
+        .format(index)).fetchone()
+
+    if error == '0':
+        text = "Пожалуйста пересоздайте аккаунт\n\n" \
+               "P.S. скорее всего я что-то обновил и ваш аккаунт потерялся("
+        return text
+    elif text[0] == "None":
+        text = "Подождите пару минут, расписание обновляется"
+        return text
 
     return text[0]
 
