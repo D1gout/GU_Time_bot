@@ -14,7 +14,10 @@ from aiogram.utils.exceptions import BotBlocked
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, \
     InlineKeyboardButton, InlineKeyboardMarkup
 
+from utils.bd import create_bd, update_bd, select_bd
+
 from utils.weekday import WEEKDAYS
+from utils.auto_task import AutoTask
 
 path = "utils/settings.ini"
 configs = configparser.ConfigParser()
@@ -30,20 +33,12 @@ if TOKEN == "YOUR_TOKEN_HERE":
 
 
 def TimeList(index):
-    connect = sqlite3.connect('users.db')
-    cursor = connect.cursor()
-
     error = ''
 
-    for group_error in cursor.execute(
-            "SELECT group_id FROM login_id WHERE id = {}".format(index)):
+    for group_error in select_bd('list_text', 'login_id', 'id', index):
         error += str(group_error)[1]
 
-    connect.commit()
-
-    text = cursor.execute(
-        "SELECT list_text FROM login_id WHERE id = {}"
-        .format(index)).fetchone()
+    text = select_bd('list_text', 'login_id', 'id', index).fetchone()
 
     if error == '0':
         text = "Пожалуйста пересоздайте аккаунт\n\n" \
@@ -59,21 +54,12 @@ def TimeList(index):
 def TimeListUpdate(index):
     __URL = 'https://gu-ural.ru/wp-admin/admin-ajax.php'
 
-    connect = sqlite3.connect('users.db')
-    cursor = connect.cursor()
-
-    connect.commit()
-
     group = ''
     error = ''
 
-    for group_num in cursor.execute(
-            "SELECT group_id FROM login_id WHERE id = {}".format(index)):
+    for group_num in select_bd('group_id', 'login_id', 'id', index):
         group += str(group_num)[1:4]
-
-    for group_error in cursor.execute(
-            "SELECT group_id FROM login_id WHERE id = {}".format(index)):
-        error += str(group_error)[1]
+        error += str(group_num)[1]
 
     text = WEEKDAYS[datetime.today().weekday()]
 
@@ -93,14 +79,13 @@ def TimeListUpdate(index):
     req = req.replace('&quot;', '')
     req = req.replace('open.gu', 'open.gu-ural.ru')
     try:
-        list = json.loads(req)
+        req_list = json.loads(req)
     except json.decoder.JSONDecodeError:
         text = 'Ошибка получения расписания'
         return text
-    text_old = text
-    list_speed = list["current"]["data"]
+    list_speed = req_list["current"]["data"]
     day = pendulum.today().format('DD.MM.YYYY')
-    nextDay = pendulum.tomorrow().format('DD.MM.YYYY')
+    next_day = pendulum.tomorrow().format('DD.MM.YYYY')
     weekday = str(datetime.today().isoweekday())
     for speed in list_speed:
         if speed["date"] != day:
@@ -129,10 +114,10 @@ def TimeListUpdate(index):
     text_old = text
 
     if weekday == "7":
-        list_speed = list["next"]["data"]
+        list_speed = req_list["next"]["data"]
 
     for speed in list_speed:
-        if speed["date"] != nextDay:
+        if speed["date"] != next_day:
             continue
 
         text += f"{speed['discipline']}"
@@ -161,11 +146,7 @@ def TimeListUpdate(index):
     if text_new == "Расписание отсутствует\n\nЗавтра:\n\n":
         text = "Расписание отсутствует"
 
-    data = (text, index)
-
-    cursor.execute(
-        "UPDATE login_id SET list_text = ? WHERE id = ?", data)
-    connect.commit()
+    update_bd('login_id', 'list_text', text, 'id', index)
 
     return text
 
@@ -173,23 +154,14 @@ def TimeListUpdate(index):
 async def FullList(index):
     __URL = 'https://gu-ural.ru/wp-admin/admin-ajax.php'
 
-    connect = sqlite3.connect('users.db')
-    cursor = connect.cursor()
-
-    connect.commit()
-
     group = ''
     error = ''
 
     weekday = str(datetime.today().isoweekday())
 
-    for group_num in cursor.execute(
-            "SELECT group_id FROM login_id WHERE id = {}".format(index)):
+    for group_num in select_bd('group_id', 'login_id', 'id', index):
         group += str(group_num)[1:4]
-
-    for group_error in cursor.execute(
-            "SELECT group_id FROM login_id WHERE id = {}".format(index)):
-        error += str(group_error)[1]
+        error += str(group_num)[1]
 
     col = {'form': '1',
            'group': group,
@@ -202,7 +174,7 @@ async def FullList(index):
     req = req.replace('&quot;', '')
     req = req.replace('open.gu', 'open.gu-ural.ru')
     try:
-        list = json.loads(req)
+        req_list = json.loads(req)
     except json.decoder.JSONDecodeError:
         text = 'Ошибка получения расписания'
         return text
@@ -210,10 +182,10 @@ async def FullList(index):
 
     check = 0
 
-    list_speed = list["current"]["data"]
+    list_speed = req_list["current"]["data"]
 
     if weekday == "7":
-        list_speed = list["next"]["data"]
+        list_speed = req_list["next"]["data"]
 
     for j in range(1, 8):
         text = WEEKDAYS[j - 1]
@@ -231,166 +203,166 @@ async def FullList(index):
                                     if list_speed[i]["classroom"] == "" or \
                                             list_speed[i]["classroom"] is None:
                                         text += list_speed[i]["discipline"] \
-                                            + " (" \
-                                            + list_speed[i]["notes"] \
-                                            + ")\n" \
-                                            + list_speed[i]["type"] + "\n" \
-                                            + list_speed[i]["place"] \
-                                            + "\n" \
-                                            + list_speed[i]["time"] \
-                                            + "\n\n"
+                                                + " (" \
+                                                + list_speed[i]["notes"] \
+                                                + ")\n" \
+                                                + list_speed[i]["type"] + "\n" \
+                                                + list_speed[i]["place"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
                                     else:
                                         text += list_speed[i]["discipline"] \
-                                            + " (" \
-                                            + list_speed[i]["notes"] \
-                                            + ")\n" \
-                                            + list_speed[i]["type"] \
-                                            + "\n" \
-                                            + list_speed[i]["place"] \
-                                            + "\n" + "ауд. " \
-                                            + list_speed[i]["classroom"] \
-                                            + "\n" \
-                                            + list_speed[i]["time"] \
-                                            + "\n\n"
+                                                + " (" \
+                                                + list_speed[i]["notes"] \
+                                                + ")\n" \
+                                                + list_speed[i]["type"] \
+                                                + "\n" \
+                                                + list_speed[i]["place"] \
+                                                + "\n" + "ауд. " \
+                                                + list_speed[i]["classroom"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
                                 else:
                                     if list_speed[i]["classroom"] == "" or \
                                             list_speed[i]["classroom"] is None:
                                         text += list_speed[i]["discipline"] \
-                                            + " (" \
-                                            + list_speed[i]["notes"] \
-                                            + ")\n" \
-                                            + list_speed[i]["type"] \
-                                            + "\n" \
-                                            + list_speed[i]["time"] \
-                                            + "\n\n"
+                                                + " (" \
+                                                + list_speed[i]["notes"] \
+                                                + ")\n" \
+                                                + list_speed[i]["type"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
                                     else:
                                         text += list_speed[i]["discipline"] \
-                                            + " (" \
-                                            + list_speed[i]["notes"] \
-                                            + ")\n" \
-                                            + list_speed[i]["type"] \
-                                            + "\n" \
-                                            + "ауд. " \
-                                            + list_speed[i]["classroom"] \
-                                            + "\n" \
-                                            + list_speed[i]["time"] \
-                                            + "\n\n"
+                                                + " (" \
+                                                + list_speed[i]["notes"] \
+                                                + ")\n" \
+                                                + list_speed[i]["type"] \
+                                                + "\n" \
+                                                + "ауд. " \
+                                                + list_speed[i]["classroom"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
                             else:
                                 if list_speed[i]["place"] is not None:
                                     if list_speed[i]["classroom"] == "" or \
                                             list_speed[i]["classroom"] is None:
                                         text += list_speed[i]["discipline"] \
-                                            + "\n" \
-                                            + list_speed[i]["type"] \
-                                            + "\n" \
-                                            + list_speed[i]["place"] \
-                                            + "\n" \
-                                            + list_speed[i]["time"] \
-                                            + "\n\n"
+                                                + "\n" \
+                                                + list_speed[i]["type"] \
+                                                + "\n" \
+                                                + list_speed[i]["place"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
                                     else:
                                         text += list_speed[i][
-                                            "discipline"] + "\n" + \
-                                            list_speed[i]["type"] + "\n" \
-                                            + list_speed[i]["place"] \
-                                            + "\n" \
-                                            + "ауд. " \
-                                            + list_speed[i]["classroom"] \
-                                            + "\n" \
-                                            + list_speed[i]["time"] \
-                                            + "\n\n"
+                                                    "discipline"] + "\n" + \
+                                                list_speed[i]["type"] + "\n" \
+                                                + list_speed[i]["place"] \
+                                                + "\n" \
+                                                + "ауд. " \
+                                                + list_speed[i]["classroom"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
                                 else:
                                     if list_speed[i]["classroom"] == "" or \
                                             list_speed[i]["classroom"] is None:
                                         text += list_speed[i]["discipline"] + \
-                                            "\n" \
-                                            + list_speed[i]["type"] \
-                                            + "\n" \
-                                            + list_speed[i]["time"] + \
-                                            "\n\n"
+                                                "\n" \
+                                                + list_speed[i]["type"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] + \
+                                                "\n\n"
 
                                     else:
                                         text += list_speed[i]["discipline"] + \
-                                            "\n" \
-                                            + list_speed[i]["type"] \
-                                            + "\n" \
-                                            + list_speed[i]["time"] + \
-                                            "\n" + "\n\n"
+                                                "\n" \
+                                                + list_speed[i]["type"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] + \
+                                                "\n" + "\n\n"
                         else:
                             if list_speed[i]["notes"] != "":
                                 if list_speed[i]["place"] is not None:
                                     if list_speed[i]["classroom"] == "" or \
                                             list_speed[i]["classroom"] is None:
                                         text += list_speed[i]["discipline"] \
-                                            + " (" \
-                                            + list_speed[i]["notes"] \
-                                            + ")\n" \
-                                            + list_speed[i]["place"] \
-                                            + "\n" \
-                                            + list_speed[i]["time"] \
-                                            + "\n\n"
+                                                + " (" \
+                                                + list_speed[i]["notes"] \
+                                                + ")\n" \
+                                                + list_speed[i]["place"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
                                     else:
                                         text += list_speed[i]["discipline"] \
-                                            + " (" \
-                                            + list_speed[i]["notes"] \
-                                            + ")\n" \
-                                            + list_speed[i]["place"] \
-                                            + "\n" + "ауд. " + \
-                                            list_speed[i][
-                                            "classroom"] \
-                                            + "\n" \
-                                            + list_speed[i]["time"] \
-                                            + "\n\n"
+                                                + " (" \
+                                                + list_speed[i]["notes"] \
+                                                + ")\n" \
+                                                + list_speed[i]["place"] \
+                                                + "\n" + "ауд. " + \
+                                                list_speed[i][
+                                                    "classroom"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
                                 else:
                                     if list_speed[i]["classroom"] == "" or \
                                             list_speed[i]["classroom"] is None:
                                         text += list_speed[i]["discipline"] \
-                                            + " (" \
-                                            + list_speed[i][
-                                            "notes"] + ")\n" \
-                                            + list_speed[i]["time"] \
-                                            + "\n\n"
+                                                + " (" \
+                                                + list_speed[i][
+                                                    "notes"] + ")\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
                                     else:
                                         text += list_speed[i]["discipline"] \
-                                            + " (" \
-                                            + list_speed[i]["notes"] \
-                                            + ")\n" \
-                                            + "ауд. " \
-                                            + list_speed[i]["classroom"] \
-                                            + "\n" \
-                                            + list_speed[i]["time"] \
-                                            + "\n\n"
+                                                + " (" \
+                                                + list_speed[i]["notes"] \
+                                                + ")\n" \
+                                                + "ауд. " \
+                                                + list_speed[i]["classroom"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
                             else:
                                 if list_speed[i]["place"] is not None:
                                     if list_speed[i]["classroom"] == "" or \
                                             list_speed[i]["classroom"] is None:
                                         text += list_speed[i]["discipline"] \
-                                            + "\n" \
-                                            + list_speed[i]["place"] \
-                                            + "\n" \
-                                            + list_speed[i]["time"] \
-                                            + "\n\n"
+                                                + "\n" \
+                                                + list_speed[i]["place"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
                                     else:
                                         text += list_speed[i][
-                                            "discipline"] + "\n" + \
-                                            list_speed[i]["place"] + "\n" \
-                                            + "ауд. " \
-                                            + list_speed[i]["classroom"] \
-                                            + "\n" \
-                                            + list_speed[i]["time"] \
-                                            + "\n\n"
+                                                    "discipline"] + "\n" + \
+                                                list_speed[i]["place"] + "\n" \
+                                                + "ауд. " \
+                                                + list_speed[i]["classroom"] \
+                                                + "\n" \
+                                                + list_speed[i]["time"] \
+                                                + "\n\n"
                                 else:
                                     if list_speed[i]["classroom"] == "" or \
                                             list_speed[i]["classroom"] is None:
                                         text += list_speed[i]["discipline"] + \
-                                            "\n" \
-                                            + list_speed[i]["time"] + \
-                                            "\n\n"
+                                                "\n" \
+                                                + list_speed[i]["time"] + \
+                                                "\n\n"
 
                                     else:
                                         text += list_speed[i]["discipline"] + \
-                                            "\n" \
-                                            + list_speed[i]["time"] + \
-                                            "\n" + "\n\n"
+                                                "\n" \
+                                                + list_speed[i]["time"] + \
+                                                "\n" + "\n\n"
 
         text_new = text
         if text_old == text_new and text_new != "Расписание отсутствует\n\n" \
@@ -431,7 +403,7 @@ button_restart = ReplyKeyboardMarkup(resize_keyboard=True).row(
     restart, on, off
 )
 
-help_comands = ReplyKeyboardMarkup(resize_keyboard=True).row(
+help_commands = ReplyKeyboardMarkup(resize_keyboard=True).row(
     qurs, start, route, restart, info
 )
 
@@ -508,180 +480,12 @@ markup6 = ReplyKeyboardMarkup(resize_keyboard=True,
 )
 
 
-async def AutoTime():  # Авто расписание
-    connect = sqlite3.connect('users.db')
-    cursor = connect.cursor()
-
-    cursor.execute("""CREATE TABLE IF NOT EXISTS login_id(
-            id INTEGER,
-            speciality_id STRING NOT NULL DEFAULT '0',
-            course_id STRING NOT NULL DEFAULT '0',
-            group_id STRING NOT NULL DEFAULT '0',
-            auto_time STRING NOT NULL DEFAULT '0',
-            list_text TEXT NOT NULL DEFAULT 'None'
-        )""")
-
-    connect.commit()
-
-    auto = [x[0] for x in cursor.execute(
-        "SELECT id FROM login_id WHERE auto_time = {}".format(1))]
-
-    while not auto:
-        await asyncio.sleep(10)
-
-        auto = [x[0] for x in cursor.execute(
-            "SELECT id FROM login_id WHERE auto_time = {}".format(1))]
-
-    check = 1
-    while auto:
-        auto_people = [x[0] for x in cursor.execute(
-            "SELECT id FROM login_id WHERE auto_time = {}".format(1))]
-
-        if datetime.now().strftime("%H:%M") == '20:55':
-            check = 1
-
-        i = 0
-        await asyncio.sleep(20)
-        if datetime.now().strftime("%H:%M") == '21:00' and check == 1:
-            for _ in auto_people:
-                try:
-                    await bot.send_message(auto_people[i],
-                                           TimeList(auto_people[i]))
-                except BotBlocked:
-                    await asyncio.sleep(0.1)
-
-                check = 0
-                i += 1
-
-
-async def ListUpdate():  # Авто обновление расписания
-    connect = sqlite3.connect('users.db')
-    cursor = connect.cursor()
-
-    cursor.execute("""CREATE TABLE IF NOT EXISTS login_id(
-            id INTEGER,
-            speciality_id STRING NOT NULL DEFAULT '0',
-            course_id STRING NOT NULL DEFAULT '0',
-            group_id STRING NOT NULL DEFAULT '0',
-            auto_time STRING NOT NULL DEFAULT '0',
-            list_text TEXT NOT NULL DEFAULT 'None'
-        )""")
-
-    connect.commit()
-
-    index_count = [x[0] for x in cursor.execute(
-        "SELECT id FROM login_id WHERE group_id != {}".format(0))]
-
-    while not index_count:
-        await asyncio.sleep(10)
-
-        index_count = [x[0] for x in cursor.execute(
-            "SELECT id FROM login_id WHERE group_id != {}".format(0))]
-
-    while index_count:
-        index = [x[0] for x in cursor.execute(
-            "SELECT id FROM login_id WHERE group_id != {}".format(0))]
-
-        i = 0
-        for _ in index:
-            old_text = [x[0] for x in cursor.execute(
-                "SELECT list_text FROM login_id WHERE id = {}"
-                .format(index[i]))]
-
-            try:
-                TimeListUpdate(index[i])
-            except BaseException:
-                await asyncio.sleep(0.1)
-
-            now_text = [x[0] for x in cursor.execute(
-                "SELECT list_text FROM login_id WHERE id = {}".
-                format(index[i]))]
-
-            if now_text[0] != old_text[0]:
-                try:
-                    await bot.send_message(index[i], now_text[0])
-                except BotBlocked:
-                    await asyncio.sleep(0.1)
-
-            i += 1
-
-        await asyncio.sleep(300)
-
-
-async def ListTimeUpdater():  # Обновление расписания в БД раз в час
-    connect = sqlite3.connect('users.db')
-    cursor = connect.cursor()
-
-    cursor.execute("""CREATE TABLE IF NOT EXISTS login_id(
-                id INTEGER,
-                speciality_id STRING NOT NULL DEFAULT '0',
-                course_id STRING NOT NULL DEFAULT '0',
-                group_id STRING NOT NULL DEFAULT '0',
-                auto_time STRING NOT NULL DEFAULT '0',
-                list_text TEXT NOT NULL DEFAULT 'None'
-            )""")
-
-    connect.commit()
-
-    index_count = [x[0] for x in cursor.execute(
-        "SELECT id FROM login_id WHERE group_id != {}".format(0))]
-
-    while index_count:
-        index_count = [x[0] for x in cursor.execute(
-            "SELECT id FROM login_id WHERE group_id != {}".format(0))]
-
-        i = 0
-        for _ in index_count:
-            try:
-                TimeListUpdate(index_count[i])
-            except BaseException:
-                await asyncio.sleep(0.1)
-
-            i += 1
-
-        await asyncio.sleep(3600)
-
-
-async def StopMessage():  # Сообщение о начале каникул
-    connect = sqlite3.connect('users.db')
-    cursor = connect.cursor()
-
-    cursor.execute("""CREATE TABLE IF NOT EXISTS login_id(
-                id INTEGER,
-                speciality_id STRING NOT NULL DEFAULT '0',
-                course_id STRING NOT NULL DEFAULT '0',
-                group_id STRING NOT NULL DEFAULT '0',
-                auto_time STRING NOT NULL DEFAULT '0',
-                list_text TEXT NOT NULL DEFAULT 'None'
-            )""")
-
-    connect.commit()
-
-    index_count = [x[0] for x in cursor.execute(
-        "SELECT id FROM login_id WHERE group_id != {}".format(0))]
-
-    i = 0
-    for _ in index_count:
-        try:
-            await bot.send_message(index_count[i], 'Спасибо, что пользовались ботом\n'
-                                                   'ФКТ желает хороших каникул тем,\nу кого они уже начались!')
-        except BaseException:
-            await asyncio.sleep(0.1)
-
-        i += 1
-
-    configs.set("Settings", "sleep_mode", "True")
-
-    with open(path, "w") as config_file:
-        configs.write(config_file)
-
-
 async def on_startup(_):
-    asyncio.create_task(AutoTime())
-    asyncio.create_task(ListUpdate())
-    asyncio.create_task(ListTimeUpdater())
+    asyncio.create_task(AutoTask(bot, configs, path, TimeList, TimeListUpdate).AutoTime())
+    asyncio.create_task(AutoTask(bot, configs, path, TimeList, TimeListUpdate).ListUpdate())
+    asyncio.create_task(AutoTask(bot, configs, path, TimeList, TimeListUpdate).ListTimeUpdater())
     if STOP == "1":
-        asyncio.create_task(StopMessage())
+        asyncio.create_task(AutoTask(bot, configs, path, TimeList, TimeListUpdate).StopMessage())
 
 
 @dp.callback_query_handler(lambda c: c.data == 'typ1_click')
@@ -706,57 +510,31 @@ async def process_callback_button1(callback_query: types.CallbackQuery):
 
 @dp.message_handler(commands=['on'])
 async def process_autotime_on(message: types.Message):
-    connect = sqlite3.connect('users.db')
-    cursor = connect.cursor()
-
-    connect.commit()
-
     auto = ''
-    for auto_num in cursor.execute(
-        "SELECT auto_time FROM login_id WHERE id = {}"
-            .format(message.chat.id)):
+    for auto_num in select_bd('auto_time', 'login_id', 'id', message.chat.id):
         auto += str(auto_num)[1]
 
     if auto == '0':
         await message.answer('Включено авто-расписание в 21:00',
                              reply_markup=button_restart)
-        cursor.execute(
-            "UPDATE login_id SET auto_time = 1 WHERE id = {};"
-            .format(message.chat.id))
-        connect.commit()
-
-        auto = ''
-        for auto_num in cursor.execute(
-                "SELECT auto_time FROM login_id "
-                "WHERE id = {}".format(message.chat.id)):
-            auto += str(auto_num)[1]
+        update_bd('login_id', 'auto_time', 1, 'id', message.chat.id)
 
 
 @dp.message_handler(commands=['off'])
 async def process_autotime_off(message: types.Message):
-    connect = sqlite3.connect('users.db')
-    cursor = connect.cursor()
-
-    connect.commit()
-
     auto = ''
-    for auto_num in cursor.execute(
-        "SELECT auto_time FROM login_id WHERE id = {}"
-            .format(message.chat.id)):
+    for auto_num in select_bd('auto_time', 'login_id', 'id', message.chat.id):
         auto += str(auto_num)[1]
 
     if auto == '1':
         await message.answer('Выключено авто-расписание',
                              reply_markup=button_restart)
-        cursor.execute(
-            "UPDATE login_id SET auto_time = 0 WHERE id = {};"
-            .format(message.chat.id))
-        connect.commit()
+        update_bd('login_id', 'auto_time', 0, 'id', message.chat.id)
 
 
 @dp.message_handler(commands=['help'])
 async def process_help_command(message: types.Message):
-    await message.answer('Мои команды', reply_markup=help_comands)
+    await message.answer('Мои команды', reply_markup=help_commands)
 
 
 @dp.message_handler(commands=['info'])
@@ -786,21 +564,15 @@ async def echo(message: types.Message):
     connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
 
-    cursor.execute("""CREATE TABLE IF NOT EXISTS login_id(
-            id INTEGER,
-            speciality_id STRING NOT NULL DEFAULT '0',
-            course_id STRING NOT NULL DEFAULT '0',
-            group_id STRING NOT NULL DEFAULT '0',
-            auto_time STRING NOT NULL DEFAULT '0',
-            list_text TEXT NOT NULL DEFAULT 'None'
-        )""")
-
-    connect.commit()
+    create_bd()
 
     people_id = message.chat.id
-    cursor.execute("SELECT id FROM login_id WHERE id = {}"
-                   .format(people_id))
+
+    select_bd('id', 'login_id', 'id', people_id)
+
     data = cursor.fetchone()
+
+    connect.commit()
 
     if data is None:
         cursor.execute(
@@ -820,313 +592,213 @@ async def echo(message: types.Message):
 
     if message.text == '1️⃣':
         if speciality == '1':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 962 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 962, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         # if speciality == '2':
-        #     cursor.execute(
-        #         f"UPDATE login_id SET group_id = 797 WHERE id = {people_id};")
-        #     connect.commit()
+        #     update_bd('login_id', 'group_id', 797, 'id', people_id)
         #     await message.answer(TimeList(people_id),
         #                          reply_markup=button_restart)
-        # if speciality == '3':
-        #     cursor.execute(
-        #         f"UPDATE login_id SET group_id = 956 WHERE id = {people_id};")
-        #     connect.commit()
-        #     await message.answer(TimeList(people_id),
-        #                          reply_markup=button_restart)
+
+        if speciality == '3':
+            update_bd('login_id', 'group_id', 956, 'id', people_id)
+            await message.answer(TimeList(people_id),
+                                 reply_markup=button_restart)
         if speciality == '4':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 934 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 934, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '6':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 943 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 943, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         # if speciality == '7':
-        #     cursor.execute(
-        #         f"UPDATE login_id SET group_id = 789 WHERE id = {people_id};")
-        #     connect.commit()
+        #     update_bd('login_id', 'group_id', 789, 'id', people_id)
         #     await message.answer(TimeList(people_id),
         #                          reply_markup=button_restart)
         if speciality == '8':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 835 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 835, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         # if speciality == '9':
-        #     cursor.execute(
-        #         f"UPDATE login_id SET group_id = 786 WHERE id = {people_id};")
-        #     connect.commit()
+        #     update_bd('login_id', 'group_id', 786, 'id', people_id)
         #     await message.answer(TimeList(people_id),
         #                          reply_markup=button_restart)
         if speciality == '10':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 923 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 923, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '11':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 916 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 916, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '12':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 920 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 920, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '13':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 922 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 922, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '14':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 913 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 913, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '15':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 815 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 815, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
 
     if message.text == '2️⃣':
         # if speciality == '1':
-        #     cursor.execute(
-        #         f"UPDATE login_id SET group_id = 962 WHERE id = {people_id};")
-        #     connect.commit()
+        #     update_bd('login_id', 'group_id', 962, 'id', people_id)
         #     await message.answer(TimeList(people_id),
         #                          reply_markup=button_restart)
         if speciality == '2':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 957 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 957, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '3':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 956 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 956, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '4':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 917 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 917, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '6':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 944 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 944, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '7':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 949 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 949, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '8':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 836 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 836, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '9':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 933 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 933, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '10':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 924 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 924, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '11':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 947 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 947, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '11':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 939 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 939, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
 
         if speciality == '13':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 948 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 948, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '15':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 842 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 842, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
 
     if message.text == '3️⃣':
         if speciality == '1':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 911 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 911, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '2':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 958 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 958, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         # if speciality == '3':
-        #     cursor.execute(
-        #         f"UPDATE login_id SET group_id = 801 WHERE id = {people_id};")
-        #     connect.commit()
+        #     update_bd('login_id', 'group_id', 801, 'id', people_id)
         #     await message.answer(TimeList(people_id),
         #                          reply_markup=button_restart)
         if speciality == '4':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 918 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 918, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '6':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 941 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 941, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '7':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 951 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 951, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '8':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 837 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 837, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         # if speciality == '9':
-        #     cursor.execute(
-        #         f"UPDATE login_id SET group_id = 819 WHERE id = {people_id};")
-        #     connect.commit()
+        #     update_bd('login_id', 'group_id', 819, 'id', people_id)
         #     await message.answer(TimeList(people_id),
         #                          reply_markup=button_restart)
         if speciality == '10':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 925 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 925, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '11':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 950 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 950, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         # if speciality == '12':
-        #     cursor.execute(
-        #         f"UPDATE login_id SET group_id = 810 WHERE id = {people_id};")
-        #     connect.commit()
+        #     update_bd('login_id', 'group_id', 810, 'id', people_id)
         #     await message.answer(TimeList(people_id),
         #                          reply_markup=button_restart)
         if speciality == '13':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 952 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 952, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
 
     if message.text == '4️⃣':
         if speciality == '1':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 912 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 912, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '3':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 814 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 814, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '4':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 919 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 919, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '6':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 945 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 945, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '7':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 953 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 953, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '8':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 838 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 838, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '9':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 946 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 946, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '10':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 926 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 926, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '11':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 955 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 955, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '12':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 940 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 940, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '13':
-            cursor.execute(
-                f"UPDATE login_id SET group_id = 954 WHERE id = {people_id};")
-            connect.commit()
+            update_bd('login_id', 'group_id', 954, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
-
 
     if message.text == 'Обновить':
         if TimeList(people_id) == "Пожалуйста пересоздайте аккаунт\n\n" \
@@ -1147,106 +819,68 @@ async def echo(message: types.Message):
         await message.answer('3 стр', reply_markup=markup4)
 
     if message.text == nup1.text:
-        cursor.execute(
-            f"UPDATE login_id SET speciality_id = 1 WHERE id = {people_id};")
-        connect.commit()
+        update_bd('login_id', 'speciality_id', 1, 'id', people_id)
         await message.answer('Ваш курс', reply_markup=markup1)
     if message.text == nup2.text:
-        cursor.execute(
-            f"UPDATE login_id SET speciality_id = 2 WHERE id = {people_id};")
-        connect.commit()
+        update_bd('login_id', 'speciality_id', 2, 'id', people_id)
         await message.answer('Ваш курс и группа', reply_markup=markup5)
     if message.text == nup3.text:
-        cursor.execute(
-            f"UPDATE login_id SET speciality_id = 3 WHERE id = {people_id};")
-        connect.commit()
+        update_bd('login_id', 'speciality_id', 3, 'id', people_id)
         await message.answer('Ваш курс', reply_markup=markup1)
     if message.text == nup4.text:
-        cursor.execute(
-            f"UPDATE login_id SET speciality_id = 4 WHERE id = {people_id};")
-        connect.commit()
+        update_bd('login_id', 'speciality_id', 4, 'id', people_id)
         await message.answer('Ваш курс', reply_markup=markup1)
     if message.text == nup6.text:
-        cursor.execute(
-            f"UPDATE login_id SET speciality_id = 6 WHERE id = {people_id};")
-        connect.commit()
+        update_bd('login_id', 'speciality_id', 6, 'id', people_id)
         await message.answer('Ваш курс', reply_markup=markup1)
     if message.text == nup7.text:
-        cursor.execute(
-            f"UPDATE login_id SET speciality_id = 7 WHERE id = {people_id};")
-        connect.commit()
+        update_bd('login_id', 'speciality_id', 7, 'id', people_id)
         await message.answer('Ваш курс', reply_markup=markup1)
     if message.text == nup8.text:
-        cursor.execute(
-            f"UPDATE login_id SET speciality_id = 8 WHERE id = {people_id};")
-        connect.commit()
+        update_bd('login_id', 'speciality_id', 8, 'id', people_id)
         await message.answer('Ваш курс', reply_markup=markup1)
     if message.text == nup9.text:
-        cursor.execute(
-            f"UPDATE login_id SET speciality_id = 9 WHERE id = {people_id};")
-        connect.commit()
+        update_bd('login_id', 'speciality_id', 9, 'id', people_id)
         await message.answer('Ваш курс', reply_markup=markup1)
     if message.text == nup10.text:
-        cursor.execute(
-            f"UPDATE login_id SET speciality_id = 10 WHERE id = {people_id};")
-        connect.commit()
+        update_bd('login_id', 'speciality_id', 10, 'id', people_id)
         await message.answer('Ваш курс', reply_markup=markup1)
     if message.text == nup11.text:
-        cursor.execute(
-            f"UPDATE login_id SET speciality_id = 11 WHERE id = {people_id};")
-        connect.commit()
+        update_bd('login_id', 'speciality_id', 11, 'id', people_id)
         await message.answer('Ваш курс', reply_markup=markup1)
     if message.text == nup12.text:
-        cursor.execute(
-            f"UPDATE login_id SET speciality_id = 12 WHERE id = {people_id};")
-        connect.commit()
+        update_bd('login_id', 'speciality_id', 12, 'id', people_id)
         await message.answer('Ваш курс', reply_markup=markup1)
     if message.text == nup13.text:
-        cursor.execute(
-            f"UPDATE login_id SET speciality_id = 13 WHERE id = {people_id};")
-        connect.commit()
+        update_bd('login_id', 'speciality_id', 13, 'id', people_id)
         await message.answer('Ваш курс', reply_markup=markup1)
     if message.text == nup1_2.text:
-        cursor.execute(
-            f"UPDATE login_id SET speciality_id = 14 WHERE id = {people_id};")
-        connect.commit()
+        update_bd('login_id', 'speciality_id', 14, 'id', people_id)
         await message.answer('Ваш курс', reply_markup=markup1)
     if message.text == nup2_2.text:
-        cursor.execute(
-            f"UPDATE login_id SET speciality_id = 15 WHERE id = {people_id};")
-        connect.commit()
+        update_bd('login_id', 'speciality_id', 15, 'id', people_id)
         await message.answer('Ваш курс', reply_markup=markup1)
     if message.text == nup12_2.text:
-        cursor.execute(
-            f"UPDATE login_id SET speciality_id = 16 WHERE id = {people_id};")
-        connect.commit()
+        update_bd('login_id', 'speciality_id', 16, 'id', people_id)
         await message.answer('Ваш курс', reply_markup=markup1)
 
     if message.text == gr1.text:
-        cursor.execute(
-            f"UPDATE login_id SET group_id = 802 WHERE id = {people_id};")
-        connect.commit()
+        update_bd('login_id', 'group_id', 802, 'id', people_id)
         await message.answer(TimeList(people_id),
                              reply_markup=button_restart)
 
     if message.text == gr2.text:
-        cursor.execute(
-            f"UPDATE login_id SET group_id = 799 WHERE id = {people_id};")
-        connect.commit()
+        update_bd('login_id', 'group_id', 799, 'id', people_id)
         await message.answer(TimeList(people_id),
                              reply_markup=button_restart)
 
     if message.text == gr3.text:
-        cursor.execute(
-            f"UPDATE login_id SET group_id = 817 WHERE id = {people_id};")
-        connect.commit()
+        update_bd('login_id', 'group_id', 817, 'id', people_id)
         await message.answer(TimeList(people_id),
                              reply_markup=button_restart)
 
     if message.text == gr4.text:
-        cursor.execute(
-            f"UPDATE login_id SET group_id = 816 WHERE id = {people_id};")
-        connect.commit()
+        update_bd('login_id', 'group_id', 816, 'id', people_id)
         await message.answer(TimeList(people_id),
                              reply_markup=button_restart)
 

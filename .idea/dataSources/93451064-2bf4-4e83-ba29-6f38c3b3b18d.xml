@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="users.db">
   <database-model serializer="dbm" dbms="SQLITE" family-id="SQLITE" format-version="4.49">
-    <root id="1"/>
+    <root id="1">
+      <ServerVersion>3.43.0</ServerVersion>
+    </root>
     <collation id="2" parent="1" name="RTRIM"/>
     <collation id="3" parent="1" name="NOCASE"/>
     <collation id="4" parent="1" name="BINARY"/>
@@ -430,6 +432,8 @@
     <routine id="172" parent="1" name="fts5"/>
     <schema id="173" parent="1" name="main">
       <Current>1</Current>
+      <IntrospectionTimestamp>2023-09-11.11:32:09.707</IntrospectionTimestamp>
+      <LocalIntrospectionTimestamp>2023-09-11.06:32:09</LocalIntrospectionTimestamp>
     </schema>
     <argument id="174" parent="16">
       <ArgumentDirection>R</ArgumentDirection>
@@ -1421,5 +1425,63 @@
     <argument id="503" parent="172">
       <Position>1</Position>
     </argument>
+    <table id="504" parent="173" name="login_id"/>
+    <table id="505" parent="173" name="sqlite_master">
+      <System>1</System>
+    </table>
+    <column id="506" parent="504" name="id">
+      <DasType>INTEGER|0s</DasType>
+      <Position>1</Position>
+    </column>
+    <column id="507" parent="504" name="speciality_id">
+      <DasType>STRING|0s</DasType>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <column id="508" parent="504" name="course_id">
+      <DasType>STRING|0s</DasType>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+    </column>
+    <column id="509" parent="504" name="group_id">
+      <DasType>STRING|0s</DasType>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+    </column>
+    <column id="510" parent="504" name="auto_time">
+      <DasType>STRING|0s</DasType>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+    </column>
+    <column id="511" parent="504" name="list_text">
+      <DasType>TEXT|0s</DasType>
+      <DefaultExpression>&apos;None&apos;</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>6</Position>
+    </column>
+    <column id="512" parent="505" name="type">
+      <DasType>TEXT|0s</DasType>
+      <Position>1</Position>
+    </column>
+    <column id="513" parent="505" name="name">
+      <DasType>TEXT|0s</DasType>
+      <Position>2</Position>
+    </column>
+    <column id="514" parent="505" name="tbl_name">
+      <DasType>TEXT|0s</DasType>
+      <Position>3</Position>
+    </column>
+    <column id="515" parent="505" name="rootpage">
+      <DasType>INT|0s</DasType>
+      <Position>4</Position>
+    </column>
+    <column id="516" parent="505" name="sql">
+      <DasType>TEXT|0s</DasType>
+      <Position>5</Position>
+    </column>
   </database-model>
 </dataSource>
