@@ -54,8 +54,6 @@ def TimeListUpdate(index):
     group = select_bd('group_id', 'login_id', 'id', index, 1)[0]
     error = select_bd('group_id', 'login_id', 'id', index, 1)[0]
 
-    print(group)
-
     text = WEEKDAYS[datetime.today().weekday()]
 
     if error == '0':
