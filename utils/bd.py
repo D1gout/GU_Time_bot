@@ -5,7 +5,7 @@ def create_bd():
     """
     Создает базу данных
     """
-    connect = sqlite3.connect('./../users.db')
+    connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
 
     cursor.execute("""CREATE TABLE IF NOT EXISTS login_id(
@@ -33,18 +33,24 @@ def update_bd(column: str, field: str, field_num: int or str, value: str, value_
     :param value_num: Значение для обновления
     :type value_num: int
     """
-    connect = sqlite3.connect('./../users.db')
+    connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
 
     cursor.execute(
-        f"UPDATE {column} SET {field} = {field_num} WHERE {value} = {value_num};")
+        f"UPDATE {column} SET {field} = ? WHERE {value} = ?;", [field_num, value_num])
     connect.commit()
 
 
-def select_bd(field: str, column: str, search_field: str, search_num: int):
-    connect = sqlite3.connect('./../users.db')
+def select_bd(field: str, column: str, search_field: str, search_num: int, method=0):
+    connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
 
-    cursor.execute(
-        f"SELECT {field} FROM {column} WHERE {search_field} = {search_num};")
-    connect.commit()
+    if method == 0:
+        cursor.execute(
+            f"SELECT {field} FROM {column} WHERE {search_field} = {search_num};")
+        connect.commit()
+    if method == 1:
+        data = cursor.execute(
+            f"SELECT {field} FROM {column} WHERE {search_field} = {search_num};").fetchone()
+        connect.commit()
+        return data

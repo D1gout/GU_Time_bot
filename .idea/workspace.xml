@@ -5,15 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="65c1b10b-1071-4541-b8c2-c3a52cf50e13" name="Changes" comment="Update v2.0">
-      <change afterPath="$PROJECT_DIR$/utils/auto_task.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/bd.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/GU_Time_bot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/GU_Time_bot.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/93451064-2bf4-4e83-ba29-6f38c3b3b18d.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/93451064-2bf4-4e83-ba29-6f38c3b3b18d.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/Bot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/utils/settings.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/auto_task.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/auto_task.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/bd.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/bd.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -424,7 +422,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/GU_Time_bot$create.coverage" NAME="create Coverage Results" MODIFIED="1686685128946" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/GU_Time_bot$bd.coverage" NAME="bd Coverage Results" MODIFIED="1694412601997" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/utils" />
-    <SUITE FILE_PATH="coverage/GU_Time_bot$Bot.coverage" NAME="Bot Coverage Results" MODIFIED="1694419053617" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/GU_Time_bot$bd.coverage" NAME="bd Coverage Results" MODIFIED="1694504698126" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/utils" />
+    <SUITE FILE_PATH="coverage/GU_Time_bot$Bot.coverage" NAME="Bot Coverage Results" MODIFIED="1694506524751" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

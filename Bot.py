@@ -33,12 +33,9 @@ if TOKEN == "YOUR_TOKEN_HERE":
 
 
 def TimeList(index):
-    error = ''
+    error = select_bd('list_text', 'login_id', 'id', index, 1)[0]
 
-    for group_error in select_bd('list_text', 'login_id', 'id', index):
-        error += str(group_error)[1]
-
-    text = select_bd('list_text', 'login_id', 'id', index).fetchone()
+    text = select_bd('list_text', 'login_id', 'id', index, 1)
 
     if error == '0':
         text = "Пожалуйста пересоздайте аккаунт\n\n" \
@@ -54,12 +51,10 @@ def TimeList(index):
 def TimeListUpdate(index):
     __URL = 'https://gu-ural.ru/wp-admin/admin-ajax.php'
 
-    group = ''
-    error = ''
+    group = select_bd('group_id', 'login_id', 'id', index, 1)[0]
+    error = select_bd('group_id', 'login_id', 'id', index, 1)[0]
 
-    for group_num in select_bd('group_id', 'login_id', 'id', index):
-        group += str(group_num)[1:4]
-        error += str(group_num)[1]
+    print(group)
 
     text = WEEKDAYS[datetime.today().weekday()]
 
@@ -154,14 +149,9 @@ def TimeListUpdate(index):
 async def FullList(index):
     __URL = 'https://gu-ural.ru/wp-admin/admin-ajax.php'
 
-    group = ''
-    error = ''
-
     weekday = str(datetime.today().isoweekday())
 
-    for group_num in select_bd('group_id', 'login_id', 'id', index):
-        group += str(group_num)[1:4]
-        error += str(group_num)[1]
+    group = select_bd('group_id', 'login_id', 'id', index, 1)[0]
 
     col = {'form': '1',
            'group': group,
@@ -510,9 +500,7 @@ async def process_callback_button1(callback_query: types.CallbackQuery):
 
 @dp.message_handler(commands=['on'])
 async def process_autotime_on(message: types.Message):
-    auto = ''
-    for auto_num in select_bd('auto_time', 'login_id', 'id', message.chat.id):
-        auto += str(auto_num)[1]
+    auto = select_bd('auto_time', 'login_id', 'id', message.chat.id, 1)[0]
 
     if auto == '0':
         await message.answer('Включено авто-расписание в 21:00',
@@ -522,9 +510,7 @@ async def process_autotime_on(message: types.Message):
 
 @dp.message_handler(commands=['off'])
 async def process_autotime_off(message: types.Message):
-    auto = ''
-    for auto_num in select_bd('auto_time', 'login_id', 'id', message.chat.id):
-        auto += str(auto_num)[1]
+    auto = select_bd('auto_time', 'login_id', 'id', message.chat.id, 1)[0]
 
     if auto == '1':
         await message.answer('Выключено авто-расписание',
@@ -568,11 +554,7 @@ async def echo(message: types.Message):
 
     people_id = message.chat.id
 
-    select_bd('id', 'login_id', 'id', people_id)
-
-    data = cursor.fetchone()
-
-    connect.commit()
+    data = select_bd('id', 'login_id', 'id', people_id, 1)
 
     if data is None:
         cursor.execute(
