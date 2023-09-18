@@ -20,24 +20,24 @@ def create_bd():
     connect.commit()
 
 
-def update_bd(column: str, field: str, field_num: int or str, value: str, value_num: int):
+def update_bd(column: str, field: str, field_num: int or str, search: str, search_num: int):
     """
     :param column: Колонка
     :type column: str
-    :param field: Поле
+    :param field: Обновляемое поле
     :type field: str
-    :param field_num: Значение поля
+    :param field_num: Значение обновляемого поля
     :type field_num: int or str
-    :param value: Обновляемое поле
-    :type value: str
-    :param value_num: Значение для обновления
-    :type value_num: int
+    :param search: Поле фильтр
+    :type search: str
+    :param search_num: Значение поля фильтра
+    :type search_num: int
     """
     connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
 
     cursor.execute(
-        f"UPDATE {column} SET {field} = ? WHERE {value} = ?;", [field_num, value_num])
+        f"UPDATE {column} SET {field} = ? WHERE {search} = ?;", [field_num, search_num])
     connect.commit()
 
 

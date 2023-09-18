@@ -44,6 +44,8 @@ def TimeList(index):
     elif text[0] == "None":
         text = "Подождите пару минут, расписание обновляется"
         return text
+    elif text[0] == "Delete":
+        return "Пересоздайте аккаунт"
 
     return text[0]
 
@@ -383,6 +385,10 @@ start = KeyboardButton('/start')
 button_start = ReplyKeyboardMarkup(resize_keyboard=True,
                                    one_time_keyboard=True).add(start)
 
+delete = KeyboardButton('/delete')
+button_delete = ReplyKeyboardMarkup(resize_keyboard=True,
+                                    one_time_keyboard=True).add(delete)
+
 on = KeyboardButton('/on')
 off = KeyboardButton('/off')
 
@@ -392,7 +398,7 @@ button_restart = ReplyKeyboardMarkup(resize_keyboard=True).row(
 )
 
 help_commands = ReplyKeyboardMarkup(resize_keyboard=True).row(
-    qurs, start, route, restart, info
+    qurs, start, delete, route, restart, info
 )
 
 typ1 = InlineKeyboardButton(
@@ -536,6 +542,15 @@ async def process_start_command(message: types.Message):
     await message.answer(
         "Я бот который скидывает расписание\n\nВыбери уровень обучения",
         reply_markup=typ_buttons)
+
+
+@dp.message_handler(commands=['delete'])
+async def process_start_command(message: types.Message):
+    update_bd('login_id', 'list_text', "Delete", 'id', message.chat.id)
+    update_bd('login_id', 'group_id', 0, 'id', message.chat.id)
+    await message.answer(
+        "Аккаунт удален",
+        reply_markup=button_start)
 
 
 @dp.message_handler(commands=['full'])
