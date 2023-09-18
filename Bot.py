@@ -44,8 +44,6 @@ def TimeList(index):
     elif text[0] == "None":
         text = "Подождите пару минут, расписание обновляется"
         return text
-    elif text[0] == "Delete":
-        return "Пересоздайте аккаунт"
 
     return text[0]
 
@@ -546,7 +544,7 @@ async def process_start_command(message: types.Message):
 
 @dp.message_handler(commands=['delete'])
 async def process_start_command(message: types.Message):
-    update_bd('login_id', 'list_text', "Delete", 'id', message.chat.id)
+    update_bd('login_id', 'list_text', "None", 'id', message.chat.id)
     update_bd('login_id', 'group_id', 0, 'id', message.chat.id)
     await message.answer(
         "Аккаунт удален",
