@@ -418,29 +418,23 @@ button3 = KeyboardButton('3️⃣')
 button4 = KeyboardButton('4️⃣')
 
 nup1 = KeyboardButton('Юриспруденция')
-# (Магистратура)
-nup1_2 = KeyboardButton('Юриспруденция\n(М)')
+nup1_2 = KeyboardButton('Юриспруденция\n(М)')   # (Магистратура)
 nup2 = KeyboardButton('Экономика')
-# (Магистратура)
-nup2_2 = KeyboardButton('Экономика\n(М)')
+nup2_2 = KeyboardButton('Экономика\n(М)')       # (Магистратура)
 nup3 = KeyboardButton('Менеджмент')
 nup4 = KeyboardButton('Прикладная информатика')
-nup6 = KeyboardButton(
-    'Реклама и связи с общественностью')
+nup6 = KeyboardButton('Реклама и связи с общественностью')
 nup7 = KeyboardButton('Сервис')
 nup8 = KeyboardButton('Хореографическое искусство')
 nup9 = KeyboardButton("Управление персоналом")
 nup10 = KeyboardButton('Журналистика')
 nup11 = KeyboardButton('Гостиничное дело')
 nup12 = KeyboardButton('Психология')
-# (Магистратура)
-nup12_2 = KeyboardButton('Психология\n(М)')
+nup12_2 = KeyboardButton('Психология\n(М)')     # (Магистратура)
 nup13 = KeyboardButton('Туризм')
 
-gr1 = KeyboardButton('ФиК 3')
-gr2 = KeyboardButton('ЦЭ 3')
-gr3 = KeyboardButton('ФиК 4')
-gr4 = KeyboardButton('ЦЭ 4')
+gr1 = KeyboardButton('1 Группа')
+gr2 = KeyboardButton('2 Группа')
 
 skip1 = KeyboardButton('2 стр')
 skip2 = KeyboardButton('3 стр')
@@ -464,7 +458,7 @@ markup4 = ReplyKeyboardMarkup(resize_keyboard=True,
 )
 markup5 = ReplyKeyboardMarkup(resize_keyboard=True,
                               one_time_keyboard=True).row(
-    button1, button2, gr1, gr2, gr3, gr4
+    gr1, gr2
 )
 markup6 = ReplyKeyboardMarkup(resize_keyboard=True,
                               one_time_keyboard=True).row(
@@ -585,9 +579,7 @@ async def echo(message: types.Message):
 
     if message.text == '1️⃣':
         if speciality == '1':
-            update_bd('login_id', 'group_id', 962, 'id', people_id)
-            await message.answer(TimeList(people_id),
-                                 reply_markup=button_restart)
+            await message.answer('Ваша группа', reply_markup=markup5)
         # if speciality == '2':
         #     update_bd('login_id', 'group_id', 797, 'id', people_id)
         #     await message.answer(TimeList(people_id),
@@ -816,7 +808,7 @@ async def echo(message: types.Message):
         await message.answer('Ваш курс', reply_markup=markup1)
     if message.text == nup2.text:
         update_bd('login_id', 'speciality_id', 2, 'id', people_id)
-        await message.answer('Ваш курс и группа', reply_markup=markup5)
+        await message.answer('Ваш курс', reply_markup=markup1)
     if message.text == nup3.text:
         update_bd('login_id', 'speciality_id', 3, 'id', people_id)
         await message.answer('Ваш курс', reply_markup=markup1)
@@ -858,22 +850,12 @@ async def echo(message: types.Message):
         await message.answer('Ваш курс', reply_markup=markup1)
 
     if message.text == gr1.text:
-        update_bd('login_id', 'group_id', 802, 'id', people_id)
+        update_bd('login_id', 'group_id', 993, 'id', people_id)
         await message.answer(TimeList(people_id),
                              reply_markup=button_restart)
 
     if message.text == gr2.text:
-        update_bd('login_id', 'group_id', 799, 'id', people_id)
-        await message.answer(TimeList(people_id),
-                             reply_markup=button_restart)
-
-    if message.text == gr3.text:
-        update_bd('login_id', 'group_id', 817, 'id', people_id)
-        await message.answer(TimeList(people_id),
-                             reply_markup=button_restart)
-
-    if message.text == gr4.text:
-        update_bd('login_id', 'group_id', 816, 'id', people_id)
+        update_bd('login_id', 'group_id', 994, 'id', people_id)
         await message.answer(TimeList(people_id),
                              reply_markup=button_restart)
 
