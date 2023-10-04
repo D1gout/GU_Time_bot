@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="65c1b10b-1071-4541-b8c2-c3a52cf50e13" name="Changes" comment="Add Delete method">
+    <list default="true" id="65c1b10b-1071-4541-b8c2-c3a52cf50e13" name="Changes" comment="Update group change">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/Bot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/utils/settings.ini" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,7 +161,23 @@
       <workItem from="1694105045938" duration="24000" />
       <workItem from="1694406650750" duration="10410000" />
       <workItem from="1695014087803" duration="4857000" />
-      <workItem from="1695802028943" duration="1788000" />
+      <workItem from="1695802028943" duration="1831000" />
+      <workItem from="1695885983517" duration="63000" />
+      <workItem from="1695886068083" duration="13000" />
+      <workItem from="1695891000565" duration="15000" />
+      <workItem from="1695894552353" duration="18000" />
+      <workItem from="1695999725389" duration="9000" />
+      <workItem from="1696066530360" duration="42000" />
+      <workItem from="1696066637007" duration="47000" />
+      <workItem from="1696069900896" duration="14000" />
+      <workItem from="1696071659644" duration="10000" />
+      <workItem from="1696073626958" duration="4000" />
+      <workItem from="1696073719649" duration="13000" />
+      <workItem from="1696098126775" duration="8000" />
+      <workItem from="1696099006155" duration="16000" />
+      <workItem from="1696100092476" duration="23000" />
+      <workItem from="1696343997831" duration="1277000" />
+      <workItem from="1696354226622" duration="2001000" />
     </task>
     <task id="LOCAL-00001" summary="Update Bot.py">
       <created>1686683078664</created>
@@ -438,7 +453,15 @@
       <option name="project" value="LOCAL" />
       <updated>1695018920187</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="Update group change">
+      <option name="closed" value="true" />
+      <created>1695805688856</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1695805688856</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -464,11 +487,12 @@
     <MESSAGE value="Update v2.0" />
     <MESSAGE value="Update 2.1" />
     <MESSAGE value="Add Delete method" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add Delete method" />
+    <MESSAGE value="Update group change" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update group change" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/GU_Time_bot$create.coverage" NAME="create Coverage Results" MODIFIED="1686685128946" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/GU_Time_bot$bd.coverage" NAME="bd Coverage Results" MODIFIED="1694504698126" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/utils" />
-    <SUITE FILE_PATH="coverage/GU_Time_bot$Bot.coverage" NAME="Bot Coverage Results" MODIFIED="1695803266257" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/GU_Time_bot$Bot.coverage" NAME="Bot Coverage Results" MODIFIED="1696355129033" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

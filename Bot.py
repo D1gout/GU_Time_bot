@@ -52,11 +52,10 @@ def TimeListUpdate(index):
     __URL = 'https://gu-ural.ru/wp-admin/admin-ajax.php'
 
     group = select_bd('group_id', 'login_id', 'id', index, 1)[0]
-    error = select_bd('group_id', 'login_id', 'id', index, 1)[0]
 
     text = WEEKDAYS[datetime.today().weekday()]
 
-    if error == '0':
+    if group == '0':
         text = "Пожалуйста пересоздайте аккаунт\n\n" \
                "P.S. скорее всего я что-то обновил и ваш аккаунт потерялся("
         return text
@@ -467,11 +466,12 @@ markup6 = ReplyKeyboardMarkup(resize_keyboard=True,
 
 
 async def on_startup(_):
-    asyncio.create_task(AutoTask(bot, configs, path, TimeList, TimeListUpdate).AutoTime())
-    asyncio.create_task(AutoTask(bot, configs, path, TimeList, TimeListUpdate).ListUpdate())
-    asyncio.create_task(AutoTask(bot, configs, path, TimeList, TimeListUpdate).ListTimeUpdater())
+    tsk = AutoTask(bot, configs, path, TimeList, TimeListUpdate)
+    asyncio.create_task(tsk.AutoTime())
+    asyncio.create_task(tsk.ListUpdate())
+    asyncio.create_task(tsk.ListTimeUpdater())
     if STOP == "1":
-        asyncio.create_task(AutoTask(bot, configs, path, TimeList, TimeListUpdate).StopMessage())
+        asyncio.create_task(tsk.StopMessage())
 
 
 @dp.callback_query_handler(lambda c: c.data == 'typ1_click')
@@ -521,8 +521,8 @@ async def process_help_command(message: types.Message):
 
 @dp.message_handler(commands=['info'])
 async def process_info_command(message: types.Message):
-    await message.answer('Версия 1.9.0\n\n'
-                         'Новые кнопки, скоро глобальное обновление',
+    await message.answer('Версия 2.0.1\n\n'
+                         'Небольшие изменения',
                          reply_markup=button_restart)
 
 
