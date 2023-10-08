@@ -480,7 +480,7 @@ async def process_callback_button1(callback_query: types.CallbackQuery):
     try:
         await bot.send_message(callback_query.from_user.id, 'Ваше направление',
                                reply_markup=markup2)
-    except BotBlocked:
+    except ():
         await asyncio.sleep(0.1)
 
 
@@ -490,7 +490,7 @@ async def process_callback_button1(callback_query: types.CallbackQuery):
     try:
         await bot.send_message(callback_query.from_user.id, 'Ваше направление',
                                reply_markup=markup6)
-    except BotBlocked:
+    except ():
         await asyncio.sleep(0.1)
 
 
