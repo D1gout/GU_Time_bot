@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="65c1b10b-1071-4541-b8c2-c3a52cf50e13" name="Changes" comment="Update group change">
+    <list default="true" id="65c1b10b-1071-4541-b8c2-c3a52cf50e13" name="Changes" comment="Update">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/Bot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/auto_task.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/auto_task.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -178,6 +180,16 @@
       <workItem from="1696100092476" duration="23000" />
       <workItem from="1696343997831" duration="1277000" />
       <workItem from="1696354226622" duration="2001000" />
+      <workItem from="1696390963715" duration="1489000" />
+      <workItem from="1696416495879" duration="18000" />
+      <workItem from="1696416555333" duration="7000" />
+      <workItem from="1696416592082" duration="6000" />
+      <workItem from="1696416639811" duration="9000" />
+      <workItem from="1696417185399" duration="18000" />
+      <workItem from="1696840207335" duration="9000" />
+      <workItem from="1696840232000" duration="5000" />
+      <workItem from="1696841857168" duration="14000" />
+      <workItem from="1697971358215" duration="85000" />
     </task>
     <task id="LOCAL-00001" summary="Update Bot.py">
       <created>1686683078664</created>
@@ -461,7 +473,15 @@
       <option name="project" value="LOCAL" />
       <updated>1695805688856</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="Update">
+      <option name="closed" value="true" />
+      <created>1696391232280</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1696391232280</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -482,13 +502,13 @@
     <MESSAGE value="Update Bot.py" />
     <MESSAGE value="Add dedicate server" />
     <MESSAGE value="Update get-mode" />
-    <MESSAGE value="Update" />
     <MESSAGE value="Preparing for the update" />
     <MESSAGE value="Update v2.0" />
     <MESSAGE value="Update 2.1" />
     <MESSAGE value="Add Delete method" />
     <MESSAGE value="Update group change" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update group change" />
+    <MESSAGE value="Update" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/GU_Time_bot$create.coverage" NAME="create Coverage Results" MODIFIED="1686685128946" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

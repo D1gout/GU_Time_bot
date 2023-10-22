@@ -42,7 +42,7 @@ class AutoTask:
                     try:
                         await self.bot.send_message(auto_people[i],
                                                     self.time_list(auto_people[i]))
-                    except ():
+                    except BotBlocked:
                         await asyncio.sleep(0.1)
 
                     check = 0
@@ -70,7 +70,7 @@ class AutoTask:
 
                 try:
                     self.time_list_update(index[i])
-                except ():
+                except BotBlocked:
                     await asyncio.sleep(0.1)
 
                 now_text = [x[0] for x in cursor.execute(
@@ -99,7 +99,7 @@ class AutoTask:
             for _ in index_count:
                 try:
                     self.time_list_update(index_count[i])
-                except ():
+                except BotBlocked:
                     await asyncio.sleep(0.1)
 
                 i += 1
@@ -115,7 +115,7 @@ class AutoTask:
             try:
                 await self.bot.send_message(index_count[i], 'Спасибо, что пользовались ботом\n'
                                                             'ФКТ желает хороших каникул тем,\nу кого они уже начались!')
-            except ():
+            except BotBlocked:
                 await asyncio.sleep(0.1)
 
             i += 1
