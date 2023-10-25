@@ -10,7 +10,7 @@ from decouple import config
 import pendulum
 import requests
 from aiogram import Bot, Dispatcher, executor, types
-from aiogram.utils.exceptions import BotBlocked
+from aiogram.utils import exceptions
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, \
     InlineKeyboardButton, InlineKeyboardMarkup
 
@@ -862,4 +862,7 @@ async def echo(message: types.Message):
 
 if __name__ == '__main__':
     if SLEEP == "False":
-        executor.start_polling(dp, on_startup=on_startup, skip_updates=True)
+        try:
+            executor.start_polling(dp, on_startup=on_startup, skip_updates=True)
+        except exceptions as e:
+            bot.send_message(706967790, e)
