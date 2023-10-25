@@ -3,7 +3,7 @@ import sqlite3
 from icecream.icecream import ic
 from datetime import datetime
 
-import aiogram.utils.exceptions as exp
+from aiogram.utils.exceptions import BotBlocked, UserDeactivated
 from utils.bd import create_bd
 connect = sqlite3.connect('users.db')
 cursor = connect.cursor()
@@ -43,8 +43,8 @@ class AutoTask:
                     try:
                         await self.bot.send_message(auto_people[i],
                                                     self.time_list(auto_people[i]))
-                    except exp as error:
-                        ic(error)
+                    except BotBlocked or UserDeactivated as e:
+                        ic(e)
                         await asyncio.sleep(0.1)
 
                     check = 0
@@ -72,8 +72,8 @@ class AutoTask:
 
                 try:
                     self.time_list_update(index[i])
-                except exp as error:
-                    ic(error)
+                except BotBlocked or UserDeactivated as e:
+                    ic(e)
                     await asyncio.sleep(0.1)
 
                 now_text = [x[0] for x in cursor.execute(
@@ -83,8 +83,8 @@ class AutoTask:
                 if now_text[0] != old_text[0]:
                     try:
                         await self.bot.send_message(index[i], now_text[0])
-                    except exp as error:
-                        ic(error)
+                    except BotBlocked or UserDeactivated as e:
+                        ic(e)
                         await asyncio.sleep(0.1)
 
                 i += 1
@@ -103,8 +103,8 @@ class AutoTask:
             for _ in index_count:
                 try:
                     self.time_list_update(index_count[i])
-                except exp as error:
-                    ic(error)
+                except BotBlocked or UserDeactivated as e:
+                    ic(e)
                     await asyncio.sleep(0.1)
 
                 i += 1
@@ -120,8 +120,8 @@ class AutoTask:
             try:
                 await self.bot.send_message(index_count[i], 'Спасибо, что пользовались ботом\n'
                                                             'ФКТ желает хороших каникул тем,\nу кого они уже начались!')
-            except exp as error:
-                ic(error)
+            except BotBlocked or UserDeactivated as e:
+                ic(e)
                 await asyncio.sleep(0.1)
 
             i += 1
