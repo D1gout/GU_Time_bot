@@ -43,7 +43,10 @@ class AutoTask:
                     try:
                         await self.bot.send_message(auto_people[i],
                                                     self.time_list(auto_people[i]))
-                    except BotBlocked or UserDeactivated as e:
+                    except BotBlocked as e:
+                        ic(e)
+                        await asyncio.sleep(0.1)
+                    except UserDeactivated as e:
                         ic(e)
                         await asyncio.sleep(0.1)
 
@@ -72,7 +75,10 @@ class AutoTask:
 
                 try:
                     self.time_list_update(index[i])
-                except BotBlocked or UserDeactivated as e:
+                except BotBlocked as e:
+                    ic(e)
+                    await asyncio.sleep(0.1)
+                except UserDeactivated as e:
                     ic(e)
                     await asyncio.sleep(0.1)
 
@@ -83,7 +89,10 @@ class AutoTask:
                 if now_text[0] != old_text[0]:
                     try:
                         await self.bot.send_message(index[i], now_text[0])
-                    except BotBlocked or UserDeactivated as e:
+                    except BotBlocked as e:
+                        ic(e)
+                        await asyncio.sleep(0.1)
+                    except UserDeactivated as e:
                         ic(e)
                         await asyncio.sleep(0.1)
 
@@ -103,7 +112,10 @@ class AutoTask:
             for _ in index_count:
                 try:
                     self.time_list_update(index_count[i])
-                except BotBlocked or UserDeactivated as e:
+                except BotBlocked as e:
+                    ic(e)
+                    await asyncio.sleep(0.1)
+                except UserDeactivated as e:
                     ic(e)
                     await asyncio.sleep(0.1)
 
@@ -120,7 +132,10 @@ class AutoTask:
             try:
                 await self.bot.send_message(index_count[i], 'Спасибо, что пользовались ботом\n'
                                                             'ФКТ желает хороших каникул тем,\nу кого они уже начались!')
-            except BotBlocked or UserDeactivated as e:
+            except BotBlocked as e:
+                ic(e)
+                await asyncio.sleep(0.1)
+            except UserDeactivated as e:
                 ic(e)
                 await asyncio.sleep(0.1)
 
