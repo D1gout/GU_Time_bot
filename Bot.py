@@ -864,5 +864,5 @@ if __name__ == '__main__':
     if SLEEP == "False":
         try:
             executor.start_polling(dp, on_startup=on_startup, skip_updates=True)
-        except exceptions as e:
-            bot.send_message(706967790, e)
+        except Exception as e:
+            bot.send_message(706967790, str(e))
