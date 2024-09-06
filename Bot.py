@@ -749,7 +749,7 @@ async def echo(message: types.Message):
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '4':
-            update_bd('login_id', 'group_id', 919, 'id', people_id)
+            update_bd('login_id', 'group_id', 1108, 'id', people_id)
             await message.answer(TimeList(people_id),
                                  reply_markup=button_restart)
         if speciality == '6':

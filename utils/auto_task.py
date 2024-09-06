@@ -98,7 +98,7 @@ class AutoTask:
 
                 i += 1
 
-            await asyncio.sleep(300)
+            await asyncio.sleep(120)
 
     async def ListTimeUpdater(self):  # Обновление расписания в БД раз в час
         index_count = [x[0] for x in cursor.execute(
