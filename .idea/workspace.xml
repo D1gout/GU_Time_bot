@@ -38,7 +38,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
@@ -188,8 +188,15 @@
       <workItem from="1696841857168" duration="14000" />
       <workItem from="1697971358215" duration="703000" />
       <workItem from="1698209171464" duration="584000" />
+<<<<<<< HEAD
       <workItem from="1698211533897" duration="1425000" />
       <workItem from="1698875851006" duration="8000" />
+=======
+      <workItem from="1698211533897" duration="2080000" />
+      <workItem from="1698617084092" duration="847000" />
+      <workItem from="1698722182542" duration="4000" />
+      <workItem from="1701453623482" duration="59000" />
+>>>>>>> 48f325bea577cc16fdfc4845df798296cf76271d
     </task>
     <task id="LOCAL-00001" summary="Update Bot.py">
       <created>1686683078664</created>
@@ -505,6 +512,7 @@
       <option name="project" value="LOCAL" />
       <updated>1698211660003</updated>
     </task>
+<<<<<<< HEAD
     <task id="LOCAL-00041" summary="Update add except">
       <option name="closed" value="true" />
       <created>1698311474975</created>
@@ -512,6 +520,15 @@
       <option name="presentableId" value="LOCAL-00041" />
       <option name="project" value="LOCAL" />
       <updated>1698311474975</updated>
+=======
+    <task id="LOCAL-00041" summary="Update add admin send">
+      <option name="closed" value="true" />
+      <created>1698213924299</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1698213924299</updated>
+>>>>>>> 48f325bea577cc16fdfc4845df798296cf76271d
     </task>
     <option name="localTasksCounter" value="42" />
     <servers />
@@ -541,8 +558,13 @@
     <MESSAGE value="Update group change" />
     <MESSAGE value="Update" />
     <MESSAGE value="Update add ice cream" />
+<<<<<<< HEAD
     <MESSAGE value="Update add except" />
     <option name="LAST_COMMIT_MESSAGE" value="Update add except" />
+=======
+    <MESSAGE value="Update add admin send" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update add admin send" />
+>>>>>>> 48f325bea577cc16fdfc4845df798296cf76271d
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/GU_Time_bot$Bot.coverage" NAME="Bot Coverage Results" MODIFIED="1692832491071" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
